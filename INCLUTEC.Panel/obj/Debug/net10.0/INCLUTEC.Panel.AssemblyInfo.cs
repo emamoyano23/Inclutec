@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("INCLUTEC.Panel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b699cefdbb5f37480766ad249c3f538029a0112a")]
 [assembly: System.Reflection.AssemblyProductAttribute("INCLUTEC.Panel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("INCLUTEC.Panel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

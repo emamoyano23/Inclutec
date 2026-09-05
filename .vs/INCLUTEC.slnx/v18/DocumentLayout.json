@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{28674F7F-DAD8-2095-69CB-9385ADE571B2}|INCLUTEC.Panel\\INCLUTEC.Panel.csproj|c:\\users\\ema_m\\onedrive\\documentos\\github\\inclutec\\inclutec.panel\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{28674F7F-DAD8-2095-69CB-9385ADE571B2}|INCLUTEC.Panel\\INCLUTEC.Panel.csproj|solutionrelative:inclutec.panel\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28674F7F-DAD8-2095-69CB-9385ADE571B2}|INCLUTEC.Panel\\INCLUTEC.Panel.csproj|c:\\users\\ema_m\\onedrive\\documentos\\github\\inclutec\\inclutec.panel\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{28674F7F-DAD8-2095-69CB-9385ADE571B2}|INCLUTEC.Panel\\INCLUTEC.Panel.csproj|solutionrelative:inclutec.panel\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "INCLUTEC.Panel\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "INCLUTEC.Panel\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAALgAAAAAAAAAAAAAAMgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-05T04:51:34.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "INCLUTEC.Panel\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "INCLUTEC.Panel\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAAAKgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-05T04:51:32.127Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

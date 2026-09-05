@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ema_m\\source\\repos\\Inclutec Chicos\\INCLUTEC\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj": {}
+    "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ema_m\\source\\repos\\Inclutec Chicos\\INCLUTEC\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj": {
+    "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ema_m\\source\\repos\\Inclutec Chicos\\INCLUTEC\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
+        "projectUniqueName": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
         "projectName": "INCLUTEC.Panel",
-        "projectPath": "C:\\Users\\ema_m\\source\\repos\\Inclutec Chicos\\INCLUTEC\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
+        "projectPath": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
         "packagesPath": "C:\\Users\\ema_m\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ema_m\\source\\repos\\Inclutec Chicos\\INCLUTEC\\INCLUTEC.Panel\\obj\\",
+        "outputPath": "C:\\Users\\ema_m\\OneDrive\\Documentos\\GitHub\\Inclutec\\INCLUTEC.Panel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
