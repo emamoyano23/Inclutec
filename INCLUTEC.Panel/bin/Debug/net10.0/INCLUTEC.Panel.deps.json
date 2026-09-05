@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "INCLUTEC.Panel/1.0.0": {
+        "runtime": {
+          "INCLUTEC.Panel.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "INCLUTEC.Panel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,21 @@
+﻿:root {
+    --bg-primary: #FFFFFF;
+    --bg-header: #ffffff;
+    --bg-card: #ffffff;
+    --txt-primary: #2d3748;
+    --txt-muted: #718096;
+    --border-light: #e2e8f0;
+    --colors-primary: #61AFFE;
+    --hover-bg: #f1f5f9;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #212529;
+    --bg-header: #1B1F22;
+    --bg-card: #1B1F22;
+    --txt-primary: #f1f5f9;
+    --txt-muted: #CBD0D7;
+    --border-light: #495057;
+    --colors-primary: #0D6EFD;
+    --hover-bg: #182551;
+}

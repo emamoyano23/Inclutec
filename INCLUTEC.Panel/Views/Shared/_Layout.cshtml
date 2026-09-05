@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-theme="light" id="html-tag">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Inclutec</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prueba11.styles.css" asp-append-version="true" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="navbar-brand-wrapper d-flex justify-content-center">
+                <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
+                    <a class="navbar-brand brand-logo" asp-action="Index" asp-controller="Home">Inclutec</a>
+                    <a class="navbar-brand brand-logo-mini" asp-action="Index" asp-controller="Home"><i class="fa-solid fa-school"></i></a>
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                        <i class="fa-solid fa-bars design-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                <ul class="navbar-nav mr-lg-4 w-100">
+                    <li class="nav-item nav-search d-none d-lg-block w-100">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="search">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Buscar..." aria-label="search" aria-describedby="search">
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item dropdown me-4">
+                        <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-bell" style="font-size:18px;"></i>
+                            <span class="count"></span>
+                        </a>
+                        @*                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notificaciones</p>
+                            <a class="dropdown-item">
+                                <div class="item-thumbnail">
+                                    <div class="item-icon bg-success">
+                                        <i class="mdi mdi-information mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="item-content">
+                                    <h6 class="font-weight-normal">Application Error</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Just now
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="item-thumbnail">
+                                    <div class="item-icon bg-warning">
+                                        <i class="mdi mdi-settings mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="item-content">
+                                    <h6 class="font-weight-normal">Settings</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Private message
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="item-thumbnail">
+                                    <div class="item-icon bg-info">
+                                        <i class="mdi mdi-account-box mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="item-content">
+                                    <h6 class="font-weight-normal">New user registration</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        2 days ago
+                                    </p>
+                                </div>
+                            </a>
+                        </div> *@
+                    </li>
+                    <li class="nav-item dropdown me-1">
+                        <button id="btn-theme" title="Cambiar Modo" class="theme-toggle-btn nav-link">
+                            <i class="fa-solid fa-moon" id="theme-icon" style="font-size:18px"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                            <i class="fa-solid fa-circle-user" style="font-size:25px;"></i>
+                            <span class="nav-profile-name">Administrador</span>
+                            <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Salir
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">
+                            <i class="fa-solid fa-house menu-icon"></i>
+                            <span class="menu-title">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="Aula" title="Aulas">
+                            <i class="fa-solid fa-chalkboard-user menu-icon"></i>
+                            <span class="menu-title">Aulas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="ResponsableAula">
+                            <i class="fa-solid fa-user-tie menu-icon"></i>
+                            <span class="menu-title">Responsable de Aula</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="Estudiante">
+                            <i class="fa-solid fa-graduation-cap menu-icon"></i>
+                            <span class="menu-title">Estudiante</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="RegistroAsistencia">
+                            <i class="fa-solid fa-clipboard-user menu-icon"></i>
+                            <span class="menu-title">Registro de Asistencia</span>
+                        </a>
+                    </li>
+                    @*                     <li class="nav-item">
+                        <a class="nav-link" href="documentation/documentation.html.htm">
+                            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                            <span class="menu-title">Documentation</span>
+                        </a>
+                    </li> *@
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <!-- main-panel ends -->
+        </div>
+
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <script src="~/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/datatables.bootstrap4.js"></script>
+    <script src="~/js/documentation.js"></script>
+    <script src="~/js/jquery.cookie.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const html = document.getElementById("html-tag");
+        const btnTheme = document.getElementById("btn-theme");
+        const themeIcon = document.getElementById("theme-icon");
+
+        // Comprueba si ya había un tema guardado en la PC
+        const savedTheme = localStorage.getItem("theme") || "light";
+        html.setAttribute("data-theme", savedTheme);
+        actualizarIcono(savedTheme);
+
+        btnTheme.addEventListener("click", () => {
+        const currentTheme = html.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        html.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        actualizarIcono(newTheme);
+        });
+
+        function actualizarIcono(theme) {
+        if (theme === "dark") {
+        themeIcon.className = "fa-solid fa-sun";
+        } else {
+        themeIcon.className = "fa-solid fa-moon";
+        }
+        }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,61 @@
+﻿
+<style>
+    .contenedor-alertas-flotantes {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        max-width: 400px;
+        width: 100%;
+    }
+</style>
+
+<div class="contenedor-alertas-flotantes">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-lg border-0 mb-3 gap-2" role="alert">
+            <i class="fa-regular fa-circle-check text-success"></i>
+            <div class="me-5">
+                <span class="text-success">@TempData["Success"]</span>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Warning"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center shadow-lg border-0 mb-3 gap-3" role="alert">
+            <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+            <div class="me-5">
+                @TempData["Warning"]
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-lg border-0 mb-3 gap-3" role="alert">
+            <i class="fa-solid fa-x text-danger"></i>
+            <div class="me-5">
+                @TempData["Error"]
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertas = document.querySelectorAll('.contenedor-alertas-flotantes .alert');
+
+        alertas.forEach(function (alerta) {
+            setTimeout(function () {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alerta);
+                if (bsAlert) {
+                    bsAlert.close();
+                }
+            }, 3000);
+        });
+    });
+</script>
