@@ -4,7 +4,7 @@ using System.Text;
 
 namespace INCLUTEC.Entities.Dtos
 {
-    internal class RegistroAsistenciaDto
+    public class RegistroAsistenciaDto
     {
         public int Id { get; set; }
 

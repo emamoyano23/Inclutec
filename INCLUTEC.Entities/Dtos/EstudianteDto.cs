@@ -5,7 +5,7 @@ using System.Text;
 
 namespace INCLUTEC.Entities.Dtos
 {
-    internal class EstudianteDto
+    public class EstudianteDto
     {
         public int Id { get; set; }
 
