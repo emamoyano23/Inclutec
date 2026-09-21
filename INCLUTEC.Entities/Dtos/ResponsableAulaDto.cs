@@ -4,7 +4,7 @@ using System.Text;
 
 namespace INCLUTEC.Entities.Dtos
 {
-    internal class ResponsableAulaDto
+    public class ResponsableAulaDto
     {
         public int Id { get; set; }
 
