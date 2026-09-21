@@ -20,7 +20,7 @@ builder.Services.AddOpenApi();
 
 
 builder.Services.AddDbContext<InclutecbdContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("INCLUTEBD"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("INCLUTECBD"),
         sqlBuilder=>
         { 
         sqlBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
