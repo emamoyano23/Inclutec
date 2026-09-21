@@ -1,7 +1,11 @@
+using INCLUTEC.Panel;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddServicesCollections();
+
 
 var app = builder.Build();
 

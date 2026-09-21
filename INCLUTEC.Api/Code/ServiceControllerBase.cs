@@ -7,5 +7,6 @@ namespace INCLUTEC.Api.Code
     public class ServiceControllerBase : ControllerBase
     {
 
+
     }
 }
