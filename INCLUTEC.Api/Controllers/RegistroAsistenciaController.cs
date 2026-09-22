@@ -119,13 +119,10 @@ namespace INCLUTEC.Api.Controllers
             await _dbcontext.SaveChangesAsync();
             return NoContent();
         }
-        public async Task<ActionResult<List<RegistroAsistenciaDto>>> Search([FromQuery] int? estudianteId, [FromQuery] bool? estaPresente)
+        public async Task<ActionResult<List<RegistroAsistenciaDto>>> Search( [FromQuery] bool? estaPresente)
         {
             var query = _dbcontext.RegistroAsistencia.AsNoTracking().AsQueryable();
-            if (estudianteId.HasValue)
-            {
-                query = query.Where(a => a.EstudianteId == estudianteId.Value);
-            }
+            
             if (estaPresente.HasValue)
             {
                 query = query.Where(a => a.EstaPresente == estaPresente.Value);
