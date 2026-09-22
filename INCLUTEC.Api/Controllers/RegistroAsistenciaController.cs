@@ -20,7 +20,7 @@ namespace INCLUTEC.Api.Controllers
 
         }
         [HttpGet]
-        public async Task<ActionResult<List<AulaDto>>> GetRegistros([FromQuery] PaginatedRequest paginated)
+        public async Task<ActionResult<List<RegistroAsistenciaDto>>> Get([FromQuery] PaginatedRequest paginated)
         {
             var obtener = await _dbcontext.RegistroAsistencia
                 .AsNoTracking()
@@ -40,7 +40,7 @@ namespace INCLUTEC.Api.Controllers
             return Ok(resultadoDto);
         }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<RegistroAsistencium>> ObtenerporID([FromQuery]int id)
+        public async Task<ActionResult<RegistroAsistenciaDto>> GetById(int id)
         {
             if (id <= 0)
             {
@@ -64,7 +64,7 @@ namespace INCLUTEC.Api.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult<RegistroAsistencium>> Crear([FromBody] RegistroAsistenciaDto dto)
+        public async Task<ActionResult<RegistroAsistencium>> Create([FromBody] RegistroAsistenciaDto dto)
         {
             var buscar = await _dbcontext.RegistroAsistencia.FirstOrDefaultAsync(c => c.Id == dto.Id);
             if (buscar != null)
@@ -87,7 +87,7 @@ namespace INCLUTEC.Api.Controllers
 
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<RegistroAsistenciaDto>> Actualizar(int id, [FromBody] RegistroAsistenciaDto dto)
+        public async Task<ActionResult<RegistroAsistenciaDto>> Update(int id, [FromBody] RegistroAsistenciaDto dto)
         {
             if (id <= 0)
             {
@@ -106,7 +106,7 @@ namespace INCLUTEC.Api.Controllers
             return NoContent();
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Eliminar([FromQuery]int id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id <= 0)
                 return BadRequest("El id no puede ser 0");
@@ -119,6 +119,7 @@ namespace INCLUTEC.Api.Controllers
             await _dbcontext.SaveChangesAsync();
             return NoContent();
         }
+        [HttpGet("search")]
         public async Task<ActionResult<List<RegistroAsistenciaDto>>> Search( [FromQuery] bool? estaPresente)
         {
             var query = _dbcontext.RegistroAsistencia.AsNoTracking().AsQueryable();
