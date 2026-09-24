@@ -16,8 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Api\" />
-    <Folder Include="Infrastructure\Services\" />
+    <ProjectReference Include="..\INCLUTEC.Entities\INCLUTEC.Entities.csproj" />
   </ItemGroup>
 
 </Project>
