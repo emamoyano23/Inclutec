@@ -20,4 +20,8 @@
     <ProjectReference Include="..\INCLUTEC.Services\INCLUTEC.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Api\" />
+  </ItemGroup>
+
 </Project>
