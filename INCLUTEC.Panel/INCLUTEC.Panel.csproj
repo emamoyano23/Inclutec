@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\INCLUTEC.Entities\INCLUTEC.Entities.csproj" />
+    <ProjectReference Include="..\INCLUTEC.Services\INCLUTEC.Services.csproj" />
   </ItemGroup>
 
 </Project>

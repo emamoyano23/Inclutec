@@ -2,4 +2,5 @@
   <Project Path="INCLUTEC.Api/INCLUTEC.Api.csproj" Id="56e70e18-0bc8-42ea-a3a2-3ee82de26a59" />
   <Project Path="INCLUTEC.Entities/INCLUTEC.Entities.csproj" Id="b325a190-7483-4ee6-b1c2-03621398481f" />
   <Project Path="INCLUTEC.Panel/INCLUTEC.Panel.csproj" />
+  <Project Path="INCLUTEC.Services/INCLUTEC.Services.csproj" Id="4e7b7fb5-847d-4574-a99f-0113320b6a3a" />
 </Solution>
