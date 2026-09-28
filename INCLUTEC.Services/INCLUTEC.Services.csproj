@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\INCLUTEC.Entities\INCLUTEC.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

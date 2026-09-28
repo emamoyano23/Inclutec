@@ -1,0 +1,88 @@
+﻿@model EstudianteDto
+
+@{
+    ViewData["Title"] = "Detalle del estudiante";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <h2>@Model.Apellido, @Model.Nombre</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="text-muted text-decoration-none" asp-action="Index" asp-controller="Home">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-muted text-decoration-none" asp-action="Index" asp-controller="Estudiante">Estudiantes</a>
+                </li>
+                <li class="breadcrumb-item active text-primary mb-0" aria-current="page">Detalle</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8 grid-margin">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    @if (!string.IsNullOrWhiteSpace(Model.AvatarUrlPictogramaPath))
+                    {
+                        <img src="@Model.AvatarUrlPictogramaPath" alt="Pictograma de @Model.Nombre"
+                             class="rounded-circle" style="width:96px;height:96px;object-fit:cover" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                             style="width:96px;height:96px">
+                            <i class="fa-solid fa-user fa-2x text-muted"></i>
+                        </div>
+                    }
+                    <div>
+                        <h4 class="mb-1">@Model.Apellido, @Model.Nombre</h4>
+                        @if (Model.EstadoActivo)
+                        {
+                            <span class="badge bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactivo</span>
+                        }
+                    </div>
+                </div>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Id</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
+
+                    <dt class="col-sm-4">Nombre</dt>
+                    <dd class="col-sm-8">@Model.Nombre</dd>
+
+                    <dt class="col-sm-4">Apellido</dt>
+                    <dd class="col-sm-8">@Model.Apellido</dd>
+
+                    <dt class="col-sm-4">Aula</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.NombreAula) ? $"Aula {Model.AulaId}" : Model.NombreAula)</dd>
+
+                    <dt class="col-sm-4">Avatar / pictograma</dt>
+                    <dd class="col-sm-8">
+                        @if (string.IsNullOrWhiteSpace(Model.AvatarUrlPictogramaPath))
+                        {
+                            <span class="text-muted">Sin asignar</span>
+                        }
+                        else
+                        {
+                            <code>@Model.AvatarUrlPictogramaPath</code>
+                        }
+                    </dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a asp-action="Index" asp-controller="Estudiante" class="btn btn-outline-secondary">Volver al listado</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
