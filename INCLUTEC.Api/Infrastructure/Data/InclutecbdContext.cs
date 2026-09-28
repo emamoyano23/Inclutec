@@ -35,7 +35,8 @@ public partial class InclutecbdContext : DbContext
         {
             entity.ToTable("Aula");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            //entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Nombre).HasMaxLength(50);
 
             entity.HasOne(d => d.Responsable).WithMany(p => p.Aulas)
@@ -48,7 +49,7 @@ public partial class InclutecbdContext : DbContext
         {
             entity.ToTable("Estudiante");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Apellido).HasMaxLength(50);
             entity.Property(e => e.AvatarUrlPictogramaPath).HasMaxLength(500);
             entity.Property(e => e.Nombre).HasMaxLength(50);
@@ -74,7 +75,7 @@ public partial class InclutecbdContext : DbContext
         {
             entity.ToTable("ResponsableAula");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Apellido).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Nombre).HasMaxLength(50);
