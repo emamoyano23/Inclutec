@@ -44,7 +44,7 @@ public partial class InclutecbdContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Aula_ResponsableAula");
         });
-
+    
         modelBuilder.Entity<Estudiante>(entity =>
         {
             entity.ToTable("Estudiante");

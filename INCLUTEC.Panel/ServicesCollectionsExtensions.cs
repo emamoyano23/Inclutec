@@ -1,10 +1,10 @@
-﻿using INCLUTEC.Panel.Infrastructure;
+﻿using INCLUTEC.Services.Services;
 
 namespace INCLUTEC.Panel
 {
     public static class ServicesCollectionsExtensions
     {
-        public static  IServiceCollection AddServicesCollections(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddServicesCollections(this IServiceCollection services, IConfiguration configuration)
         {
             var baseUrl = configuration["ApiSettings:baseUrl"];
 
@@ -18,9 +18,9 @@ namespace INCLUTEC.Panel
                 BaseAddress = new Uri(baseUrl)
             });
 
+            services.AddScoped<IAulaService, AulaService>();
 
             return services;
-
         }
     }
 }
