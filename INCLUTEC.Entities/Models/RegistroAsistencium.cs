@@ -8,7 +8,7 @@ namespace INCLUTEC.Entities.Models
     {
         public int Id { get; set; }
 
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; }
 
         
         public int EstudianteId { get; set; }

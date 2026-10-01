@@ -10,7 +10,7 @@ namespace INCLUTEC.Entities.Dtos
 
         public int Id { get; set; }
 
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; } 
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un estudiante válido")]
         public int EstudianteId { get; set; }

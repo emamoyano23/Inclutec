@@ -1,4 +1,5 @@
-﻿using INCLUTEC.Services.Services;
+﻿using INCLUTEC.Panel.Infrastructure;
+using INCLUTEC.Services.Services;
 
 namespace INCLUTEC.Panel
 {
@@ -17,9 +18,8 @@ namespace INCLUTEC.Panel
             {
                 BaseAddress = new Uri(baseUrl)
             });
-
+            services.AddScoped<IRegistroAsistenciaService, RegistroAsistenciaService>();
             services.AddScoped<IAulaService, AulaService>();
-
             return services;
         }
     }

@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "INCLUTEC.Api\\INCLUTEC.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
