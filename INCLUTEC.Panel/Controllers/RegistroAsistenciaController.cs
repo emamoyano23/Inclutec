@@ -11,13 +11,9 @@ namespace INCLUTEC.Panel.Controllers
         {
             _service = service;
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(RegistroAsistenciaDto dto)
-        {
-             var update = await _service.Update(dto);
-            return View(update);
-        }
-        public async Task<IActionResult> Index(string? name)
+ 
+       
+        public async Task<IActionResult> RegistroAsistencia(string? name)
         {
             var pagination = new PaginatedRequest
             {
@@ -28,7 +24,7 @@ namespace INCLUTEC.Panel.Controllers
             return View(result.Response);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> RegistroAsistenciaDetails(int id)
         {
             if (id == 0)
             {
@@ -41,7 +37,7 @@ namespace INCLUTEC.Panel.Controllers
             return View(result.Response);
         }
         [HttpPost]
-        public async Task<IActionResult> Details(RegistroAsistenciaDto registroAsistenciaDto)
+        public async Task<IActionResult> RegistroAsistenciaDetails(RegistroAsistenciaDto registroAsistenciaDto)
         {
             if (!ModelState.IsValid)
             {
