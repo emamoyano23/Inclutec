@@ -1,0 +1,98 @@
+﻿@using INCLUTEC.Entities.Dtos;
+@model List<RegistroAsistenciaDto>
+@{
+    ViewData["Title"] = "Registro de Asistencia";
+    string? busquedaActual = Context.Request.Query["busqueda"];
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Registro de Asistencia</h2>
+        <a asp-action="RegistroAsistenciaDetails" asp-route-id="0" class="btn btn-primary text-white">
+            <i class="bi bi-plus-lg"></i> Nuevo Registro
+        </a>
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <form asp-action="RegistroAsistencia" method="get" class="row g-2 align-items-center">
+                <div class="col-md-9 col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                        <input type="text" name="busqueda" value="@busquedaActual" class="form-control"
+                               placeholder="Buscar por nombre de estudiante u observaciones..." />
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="fa fa-search" aria-hidden="true"></i> Buscar
+                    </button>
+                    @if (!string.IsNullOrEmpty(busquedaActual))
+                    {
+                        <a asp-action="RegistroAsistencia" class="btn btn-outline-secondary">Limpiar</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Estudiante</th>
+                        <th>Fecha</th>
+                        <th>Presente</th>
+                        <th>Observaciones</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var registro in Model)
+                        {
+                            <tr>
+                                <td>@registro.Id</td>
+                                <td>@registro.NombreCompletoEstudiante</td>
+                                <td>@registro.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (registro.EstaPresente)
+                                    {
+                                        <span class="badge bg-success">Sí</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">No</span>
+                                    }
+                                </td>
+                                <td>@(string.IsNullOrEmpty(registro.Observaciones) ? "-" : registro.Observaciones)</td>
+                                <td class="text-center">
+                                    <a asp-action="RegistroAsistenciaDetails" asp-route-id="@registro.Id" class="btn btn-sm btn-warning me-1">
+                                        Editar
+                                    </a>
+
+                                    <form asp-action="Delete" asp-route-id="@registro.Id" method="post" class="d-inline"
+                                          onclick="return confirm('¿Está seguro de que desea eliminar este registro?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                No se encontraron registros de asistencia.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
