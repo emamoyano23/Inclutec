@@ -2,21 +2,22 @@
 using INCLUTEC.Panel.Infrastructure.Api.Services;
 using System.Net.Http.Json;
 
-namespace INCLUTEC.Panel.Infrastructure
+namespace INCLUTEC.Services.Services
 {
-    public class RegistroAsistenciaService : IRegistroAsistenciaService
+    public class AulaService : IAulaService
     {
-      
-        private const string url = "api/RegistroAsistencia";
-        private readonly HttpClient _httpclient;
-        public RegistroAsistenciaService(HttpClient http)
+        private const string url = "api/Aula";
+        private readonly HttpClient _httpClient;
+
+        public AulaService(HttpClient httpClient)
         {
-               _httpclient = http;
+            _httpClient = httpClient;
         }
-    
-        public async Task<HttpResponseWrapper<List<RegistroAsistenciaDto>>> GetPaginatedAsync(string? name, PaginatedRequest paginated)
+
+        public async Task<HttpResponseWrapper<List<AulaDto>>> GetPaginatedAsync(string? name, PaginatedRequest paginated)
         {
             string baseUrl;
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 baseUrl = $"{url}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
@@ -25,33 +26,37 @@ namespace INCLUTEC.Panel.Infrastructure
             {
                 baseUrl = $"{url}/search?nombre={name}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
             }
-      return await GetListAsync(baseUrl);
-        }
-        public async Task<HttpResponseWrapper<List<RegistroAsistenciaDto>>> GetListAsync(string url)
-        {
-            var response = await _httpclient.GetAsync(url);
-            return await BuildResponseAsync<List<RegistroAsistenciaDto>>(response);
-        }
-        public async Task<HttpResponseWrapper<object>> Update(RegistroAsistenciaDto dto)
-        {
-            var response = await _httpclient.PutAsJsonAsync($"{url}/{dto.Id}", dto);
-            return await BuildResponseAsync<object>(response);
-        }
-        public async Task<HttpResponseWrapper<RegistroAsistenciaDto>> GetID(int id)
-        {
-            var response = await _httpclient.GetAsync($"{url}/{id}");
-            return await BuildResponseAsync<RegistroAsistenciaDto>(response);
+
+            return await GetListAsync(baseUrl);
         }
 
-        public async Task<HttpResponseWrapper<object>> CreateAsync(RegistroAsistenciaDto dto)
+        public async Task<HttpResponseWrapper<List<AulaDto>>> GetListAsync(string url)
         {
-            var response = await _httpclient.PostAsJsonAsync(url, dto);
+            var response = await _httpClient.GetAsync(url);
+            return await BuildResponseAsync<List<AulaDto>>(response);
+        }
+
+        public async Task<HttpResponseWrapper<AulaDto>> GetID(int id)
+        {
+            var response = await _httpClient.GetAsync($"{url}/{id}");
+            return await BuildResponseAsync<AulaDto>(response);
+        }
+
+        public async Task<HttpResponseWrapper<object>> CreateAsync(AulaDto dto)
+        {
+            var response = await _httpClient.PostAsJsonAsync(url, dto);
+            return await BuildResponseAsync<object>(response);
+        }
+
+        public async Task<HttpResponseWrapper<object>> Update(AulaDto dto)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"{url}/{dto.Id}", dto);
             return await BuildResponseAsync<object>(response);
         }
 
         public async Task<HttpResponseWrapper<string>> DeleteAsync(int id)
         {
-            var response = await _httpclient.DeleteAsync($"{url}/{id}");
+            var response = await _httpClient.DeleteAsync($"{url}/{id}");
             return await BuildResponseAsync<string>(response);
         }
 
@@ -74,6 +79,5 @@ namespace INCLUTEC.Panel.Infrastructure
                 response,
                 await response.Content.ReadAsStringAsync());
         }
-
     }
 }

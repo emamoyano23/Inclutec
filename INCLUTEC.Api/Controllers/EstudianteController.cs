@@ -151,6 +151,11 @@ namespace INCLUTEC.Api.Controllers
 
             estudianteDto.Id = estudiante.Id;
 
+            estudianteDto.NombreAula = await _dbContext.Aulas
+                .Where(a => a.Id == estudianteDto.AulaId)
+                .Select(a => a.Nombre)
+                .FirstOrDefaultAsync();
+
             return CreatedAtAction(nameof(GetById), new { id = estudiante.Id }, estudianteDto);
         }
 
