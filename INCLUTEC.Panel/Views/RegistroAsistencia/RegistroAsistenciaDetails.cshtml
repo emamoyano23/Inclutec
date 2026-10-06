@@ -1,0 +1,66 @@
+﻿@using INCLUTEC.Entities.Dtos;
+@model RegistroAsistenciaDto
+@{
+    bool esNuevo = Model.Id == 0;
+    ViewData["Title"] = esNuevo ? "Nuevo Registro de Asistencia" : "Editar Registro de Asistencia";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="RegistroAsistenciaDetails" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="Fecha" class="form-label fw-bold">Fecha</label>
+                            <input asp-for="Fecha" type="date" class="form-control" />
+                            <span asp-validation-for="Fecha" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EstudianteId" class="form-label fw-bold">ID del Estudiante</label>
+                            <input asp-for="EstudianteId" type="number" class="form-control" placeholder="Ingrese el ID del estudiante..." />
+                            <span asp-validation-for="EstudianteId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check d-flex align-items-center gap-2 ps-0">
+                            <input asp-for="EstaPresente" class="form-check-input ms-0 mt-0" type="checkbox" id="chkEstaPresente" />
+                            <label asp-for="EstaPresente" class="form-check-label fw-bold mb-1 ms-0" for="chkEstaPresente">¿Está presente?</label>
+                            <span asp-validation-for="EstaPresente" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Observaciones" class="form-label fw-bold">Observaciones</label>
+                            <textarea asp-for="Observaciones" class="form-control" rows="3" placeholder="Ingrese alguna observacion (max. 500 caracteres)..."></textarea>
+                            <span asp-validation-for="Observaciones" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="RegistroAsistencia" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary text-white">
+                                <i class="bi bi-save"></i> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

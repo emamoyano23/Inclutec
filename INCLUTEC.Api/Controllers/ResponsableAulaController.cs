@@ -96,7 +96,7 @@ namespace INCLUTEC.Api.Controllers
         }
 
 
-        // creamos un nuevo profe o repssable (revisar!!)
+        // creamos un nuevo profe o repssable
         [HttpPost()]
         [Route("")]
         public async Task<ActionResult<ResponsableAulaDto>> Create([FromBody] ResponsableAulaDto responsableAulaDto)
