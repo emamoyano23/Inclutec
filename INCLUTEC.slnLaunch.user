@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "Nuevo perfil",
+    "Projects": [
+      {
+        "Path": "INCLUTEC.Api\\INCLUTEC.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "INCLUTEC.Entities\\INCLUTEC.Entities.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "INCLUTEC.Panel\\INCLUTEC.Panel.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "INCLUTEC.Services\\INCLUTEC.Services.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
