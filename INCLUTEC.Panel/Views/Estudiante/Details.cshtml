@@ -4,6 +4,8 @@
     ViewData["Title"] = "Detalle del estudiante";
 }
 
+<partial name="_Notification" />
+
 <div class="row">
     <div class="col-md-12 grid-margin">
         <h2>@Model.Apellido, @Model.Nombre</h2>
@@ -78,8 +80,14 @@
                     </dd>
                 </dl>
 
-                <div class="mt-4">
+                <div class="d-flex gap-2 mt-4">
                     <a asp-action="Index" asp-controller="Estudiante" class="btn btn-outline-secondary">Volver al listado</a>
+                    <a asp-action="Edit" asp-controller="Estudiante" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+                    <form asp-action="Delete" asp-controller="Estudiante" asp-route-id="@Model.Id" method="post"
+                          onsubmit="return confirm('Seguro que querés eliminar a @Model.Apellido, @Model.Nombre?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+                    </form>
                 </div>
 
             </div>
