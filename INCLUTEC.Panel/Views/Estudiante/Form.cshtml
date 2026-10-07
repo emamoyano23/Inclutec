@@ -1,0 +1,124 @@
+﻿@model EstudianteDto
+
+@{
+    bool esNuevo = Model.Id == 0;
+    ViewData["Title"] = esNuevo ? "Nuevo estudiante" : "Editar estudiante";
+    var aulas = ViewBag.Aulas as SelectList ?? new SelectList(new List<AulaDto>(), "Id", "Nombre");
+}
+
+<partial name="_Notification" />
+
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <h2>@ViewData["Title"]</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="text-muted text-decoration-none" asp-action="Index" asp-controller="Home">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-muted text-decoration-none" asp-action="Index" asp-controller="Estudiante">Estudiantes</a>
+                </li>
+                <li class="breadcrumb-item active text-primary mb-0" aria-current="page">@(esNuevo ? "Alta" : "Edicion")</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8 grid-margin">
+        <div class="card">
+            <div class="card-body">
+
+                <form asp-action="@(esNuevo ? "Create" : "Edit")" asp-controller="Estudiante"
+                      asp-route-id="@(esNuevo ? null : (int?)Model.Id)" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label asp-for="Nombre" class="form-label">Nombre</label>
+                            <input asp-for="Nombre" class="form-control" placeholder="Nombre del estudiante" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6 mb-3">
+                            <label asp-for="Apellido" class="form-label">Apellido</label>
+                            <input asp-for="Apellido" class="form-control" placeholder="Apellido del estudiante" />
+                            <span asp-validation-for="Apellido" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AulaId" class="form-label">Aula</label>
+                        <select asp-for="AulaId" asp-items="aulas" class="form-select">
+                            <option value="0">-- Elegir aula --</option>
+                        </select>
+                        <span asp-validation-for="AulaId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AvatarUrlPictogramaPath" class="form-label">Avatar o pictograma</label>
+                        <input asp-for="AvatarUrlPictogramaPath" id="inputAvatar" class="form-control"
+                               placeholder="/pictogramas/nombre.png" />
+                        <div class="form-text">
+                            Ruta o direccion de la imagen con la que el estudiante se va a reconocer en la app del aula.
+                        </div>
+                        <span asp-validation-for="AvatarUrlPictogramaPath" class="text-danger"></span>
+
+                        <img id="previewAvatar" src="@Model.AvatarUrlPictogramaPath" alt="Vista previa del pictograma"
+                             class="rounded-circle mt-3" style="width:96px;height:96px;object-fit:cover@(string.IsNullOrWhiteSpace(Model.AvatarUrlPictogramaPath) ? ";display:none" : "")" />
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="EstadoActivo" class="form-check-input" type="checkbox" id="chkEstadoActivo" />
+                        <label asp-for="EstadoActivo" class="form-check-label" for="chkEstadoActivo">Estudiante activo</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a asp-action="Index" asp-controller="Estudiante" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Vista previa del pictograma mientras se escribe la ruta.
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("inputAvatar");
+            const preview = document.getElementById("previewAvatar");
+
+            if (!input || !preview) {
+                return;
+            }
+
+            preview.addEventListener("error", function () {
+                preview.style.display = "none";
+            });
+
+            input.addEventListener("input", function () {
+                const valor = input.value.trim();
+
+                if (valor === "") {
+                    preview.style.display = "none";
+                    return;
+                }
+
+                preview.src = valor;
+                preview.style.display = "inline";
+            });
+        });
+    </script>
+}
