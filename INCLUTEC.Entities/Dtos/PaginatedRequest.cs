@@ -8,6 +8,6 @@ namespace INCLUTEC.Entities.Dtos
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-       public string busqueda { get; set; }
+        public string? busqueda { get; set; }
     }
 }
