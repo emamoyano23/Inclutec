@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace INCLUTEC.Api.Controllers
 {
+
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ResponsableAulaController : Controller
@@ -49,7 +50,7 @@ namespace INCLUTEC.Api.Controllers
         {
             var query = await _dbcontext.ResponsableAulas
                 .AsNoTracking()
-                .Where(r => string.IsNullOrEmpty(nombre) || r.Nombre.Contains(nombre))  
+                .Where(r => string.IsNullOrEmpty(nombre) || r.Nombre.Contains(nombre))
                 .OrderByDescending(r => r.Id)
                 .Skip((paginated.PageNumber - 1) * paginated.PageSize)
                 .Take(paginated.PageSize)
@@ -74,7 +75,7 @@ namespace INCLUTEC.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ResponsableAulaDto>> GetById(int id)
         {
-            
+
             var query = await _dbcontext.ResponsableAulas
                 .FirstOrDefaultAsync(r => r.Id == id);
 
