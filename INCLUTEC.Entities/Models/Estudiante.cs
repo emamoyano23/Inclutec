@@ -28,4 +28,6 @@ public partial class Estudiante
     public virtual Aula IdNavigation { get; set; } = null!;
 
     public virtual ICollection<RegistroAsistencium> RegistroAsistencia { get; set; } = new List<RegistroAsistencium>();
+    public virtual Aula? Aula { get; set; }
+
 }

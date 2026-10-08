@@ -179,5 +179,33 @@ namespace INCLUTEC.Api.Controllers
 
             return Ok(resultDto);
         }
+        [HttpPost("bulk")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        public async Task<IActionResult> CreateBulk([FromBody] List<RegistroAsistencium> dtoList)
+        {
+            if (dtoList == null || !dtoList.Any())
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Lista vacía",
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = "No se enviaron registros de asistencia para guardar."
+                });
+            }
+
+            var entidades = dtoList.Select(dto => new RegistroAsistencium
+            {
+                Fecha = dto.Fecha,
+                EstudianteId = dto.EstudianteId,
+                EstaPresente = dto.EstaPresente,
+                Observaciones = dto.Observaciones
+            }).ToList();
+
+            await _dbcontext.RegistroAsistencia.AddRangeAsync(entidades);
+            await _dbcontext.SaveChangesAsync();
+
+            return Ok(new { Message = $"Se registraron {entidades.Count} asistencias correctamente." });
+        }
     }
 }
