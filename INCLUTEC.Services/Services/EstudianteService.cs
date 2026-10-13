@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using INCLUTEC.Entities.Dtos;
 using INCLUTEC.Panel.Infrastructure.Api.Services;
 
@@ -72,6 +73,26 @@ namespace INCLUTEC.Panel.Infrastructure
             var response = await _httpClient.DeleteAsync($"{url}/{id}");
 
             return await BuildResponseAsync<string>(response);
+        }
+
+        public async Task<HttpResponseWrapper<AvatarSubidoDto>> UploadAvatarAsync(Stream contenido, string nombreArchivo, string contentType)
+        {
+            using var form = new MultipartFormDataContent();
+
+            var archivo = new StreamContent(contenido);
+            archivo.Headers.ContentType = new MediaTypeHeaderValue(
+                string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType);
+
+            form.Add(archivo, "file", nombreArchivo);
+
+            var response = await _httpClient.PostAsync($"{url}/upload-avatar", form);
+
+            return await BuildResponseAsync<AvatarSubidoDto>(response);
+        }
+
+        public async Task<HttpResponseMessage> GetAvatarAsync(string fileName)
+        {
+            return await _httpClient.GetAsync($"{url}/avatar/{Uri.EscapeDataString(fileName)}");
         }
 
         private static async Task<HttpResponseWrapper<T>> BuildResponseAsync<T>(HttpResponseMessage response)

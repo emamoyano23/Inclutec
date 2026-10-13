@@ -1,8 +1,9 @@
-using INCLUTEC.Entities.Dtos;
+﻿using INCLUTEC.Entities.Dtos;
 using INCLUTEC.Panel.Infrastructure;
 using INCLUTEC.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
 
 namespace INCLUTEC.Panel.Controllers
 {
@@ -58,9 +59,16 @@ namespace INCLUTEC.Panel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EstudianteDto estudianteDto)
+        public async Task<IActionResult> Create(EstudianteDto estudianteDto, IFormFile? avatar)
         {
             if (!ModelState.IsValid)
+            {
+                await CargarAulasAsync(estudianteDto.AulaId);
+
+                return View("Form", estudianteDto);
+            }
+
+            if (!await SubirAvatarAsync(avatar, estudianteDto))
             {
                 await CargarAulasAsync(estudianteDto.AulaId);
 
@@ -102,9 +110,16 @@ namespace INCLUTEC.Panel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EstudianteDto estudianteDto)
+        public async Task<IActionResult> Edit(int id, EstudianteDto estudianteDto, IFormFile? avatar)
         {
             if (!ModelState.IsValid)
+            {
+                await CargarAulasAsync(estudianteDto.AulaId);
+
+                return View("Form", estudianteDto);
+            }
+
+            if (!await SubirAvatarAsync(avatar, estudianteDto))
             {
                 await CargarAulasAsync(estudianteDto.AulaId);
 
@@ -147,11 +162,92 @@ namespace INCLUTEC.Panel.Controllers
 
         // La API devuelve el motivo en el cuerpo (por ejemplo el 409 al borrar un
         // estudiante con asistencias). Si viene vacio, caigo en el mensaje generico.
+        // Muestra el pictograma que la API guarda fuera de wwwroot. El navegador no le pega
+        // a la API directo: el Panel lo pide y lo devuelve.
+        [HttpGet]
+        public async Task<IActionResult> Avatar(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return NotFound();
+            }
+
+            var response = await _estudianteService.GetAvatarAsync(fileName);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return NotFound();
+            }
+
+            var contenido = await response.Content.ReadAsByteArrayAsync();
+            var contentType = response.Content.Headers.ContentType?.ToString() ?? "image/jpeg";
+
+            return File(contenido, contentType);
+        }
+
+        // Si eligieron una imagen nueva la sube a la API y guarda en el DTO el nombre que
+        // devuelve. Si no eligieron ninguna, queda la que ya tenia.
+        private async Task<bool> SubirAvatarAsync(IFormFile? avatar, EstudianteDto estudianteDto)
+        {
+            if (avatar == null || avatar.Length == 0)
+            {
+                return true;
+            }
+
+            await using var contenido = avatar.OpenReadStream();
+
+            var result = await _estudianteService.UploadAvatarAsync(contenido, avatar.FileName, avatar.ContentType);
+
+            if (result.Error || string.IsNullOrWhiteSpace(result.Response?.FileName))
+            {
+                TempData["Error"] = await MensajeDeErrorAsync(result);
+
+                return false;
+            }
+
+            estudianteDto.AvatarUrlPictogramaPath = result.Response.FileName;
+
+            return true;
+        }
+
         private static async Task<string> MensajeDeErrorAsync<T>(Infrastructure.Api.Services.HttpResponseWrapper<T> result)
         {
-            return string.IsNullOrWhiteSpace(result.ErrorMessage)
-                ? await result.GetErrorMessage()
-                : result.ErrorMessage;
+            if (string.IsNullOrWhiteSpace(result.ErrorMessage))
+            {
+                return await result.GetErrorMessage();
+            }
+
+            // Si la API devolvio un ProblemDetails, muestro el texto y no el JSON entero.
+            try
+            {
+                using var json = JsonDocument.Parse(result.ErrorMessage);
+                var raiz = json.RootElement;
+
+                if (raiz.ValueKind == JsonValueKind.Object)
+                {
+                    if (raiz.TryGetProperty("detail", out var detalle) && detalle.ValueKind == JsonValueKind.String)
+                    {
+                        return detalle.GetString() ?? result.ErrorMessage;
+                    }
+
+                    if (raiz.TryGetProperty("errors", out var errores) && errores.ValueKind == JsonValueKind.Object)
+                    {
+                        foreach (var campo in errores.EnumerateObject())
+                        {
+                            foreach (var mensaje in campo.Value.EnumerateArray())
+                            {
+                                return mensaje.GetString() ?? result.ErrorMessage;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                // No era JSON, es un texto plano: lo muestro tal cual.
+            }
+
+            return result.ErrorMessage;
         }
 
         // Carga el desplegable de aulas del formulario. El docente elige el aula por

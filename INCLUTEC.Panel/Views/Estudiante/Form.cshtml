@@ -1,4 +1,5 @@
 ﻿@model EstudianteDto
+@using INCLUTEC.Panel.Helpers
 
 @{
     bool esNuevo = Model.Id == 0;
@@ -31,7 +32,7 @@
             <div class="card-body">
 
                 <form asp-action="@(esNuevo ? "Create" : "Edit")" asp-controller="Estudiante"
-                      asp-route-id="@(esNuevo ? null : (int?)Model.Id)" method="post">
+                      asp-route-id="@(esNuevo ? null : (int?)Model.Id)" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
 
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
@@ -61,16 +62,24 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="AvatarUrlPictogramaPath" class="form-label">Avatar o pictograma</label>
-                        <input asp-for="AvatarUrlPictogramaPath" id="inputAvatar" class="form-control"
-                               placeholder="/pictogramas/nombre.png" />
+                        <label for="inputAvatar" class="form-label">Avatar o pictograma</label>
+                        <input type="hidden" asp-for="AvatarUrlPictogramaPath" />
+                        <input type="file" name="avatar" id="inputAvatar" class="form-control"
+                               accept=".jpg,.jpeg,.png,.webp" />
                         <div class="form-text">
-                            Ruta o direccion de la imagen con la que el estudiante se va a reconocer en la app del aula.
+                            JPG, PNG o WEBP, hasta 2 MB. Es la imagen con la que el estudiante se va a reconocer en la app del aula.
+                            @if (!esNuevo)
+                            {
+                                <text>Si no elegis una nueva, queda la que tenia.</text>
+                            }
                         </div>
                         <span asp-validation-for="AvatarUrlPictogramaPath" class="text-danger"></span>
 
-                        <img id="previewAvatar" src="@Model.AvatarUrlPictogramaPath" alt="Vista previa del pictograma"
-                             class="rounded-circle mt-3" style="width:96px;height:96px;object-fit:cover@(string.IsNullOrWhiteSpace(Model.AvatarUrlPictogramaPath) ? ";display:none" : "")" />
+                        @{
+                            var avatarActual = AvatarHelper.Src(Url, Model.AvatarUrlPictogramaPath);
+                        }
+                        <img id="previewAvatar" src="@avatarActual" alt="Vista previa del pictograma"
+                             class="rounded-circle mt-3" style="width:96px;height:96px;object-fit:cover@(avatarActual == null ? ";display:none" : "")" />
                     </div>
 
                     <div class="form-check mb-4">
@@ -95,7 +104,7 @@
     }
 
     <script>
-        // Vista previa del pictograma mientras se escribe la ruta.
+        // Vista previa de la imagen elegida, antes de guardar.
         document.addEventListener("DOMContentLoaded", function () {
             const input = document.getElementById("inputAvatar");
             const preview = document.getElementById("previewAvatar");
@@ -108,15 +117,20 @@
                 preview.style.display = "none";
             });
 
-            input.addEventListener("input", function () {
-                const valor = input.value.trim();
+            input.addEventListener("change", function () {
+                const archivo = input.files && input.files[0];
 
-                if (valor === "") {
-                    preview.style.display = "none";
+                if (!archivo) {
                     return;
                 }
 
-                preview.src = valor;
+                if (archivo.size > 2 * 1024 * 1024) {
+                    alert("La imagen pesa mas de 2 MB. Elegi una mas liviana.");
+                    input.value = "";
+                    return;
+                }
+
+                preview.src = URL.createObjectURL(archivo);
                 preview.style.display = "inline";
             });
         });

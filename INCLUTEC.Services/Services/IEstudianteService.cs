@@ -11,5 +11,7 @@ namespace INCLUTEC.Panel.Infrastructure
         Task<HttpResponseWrapper<object>> CreateAsync(EstudianteDto estudianteDto);
         Task<HttpResponseWrapper<object>> UpdateAsync(int id, EstudianteDto estudianteDto);
         Task<HttpResponseWrapper<string>> DeleteAsync(int id);
+        Task<HttpResponseWrapper<AvatarSubidoDto>> UploadAvatarAsync(Stream contenido, string nombreArchivo, string contentType);
+        Task<HttpResponseMessage> GetAvatarAsync(string fileName);
     }
 }

@@ -22,7 +22,7 @@ namespace INCLUTEC.Api.Infrastructure.Data
                 entity.Property(e => e.AvatarUrlPictogramaPath).HasMaxLength(1000).IsRequired(false);
                 entity.Property(e => e.EstadoActivo).HasDefaultValue(true);
 
-                entity.HasOne<Aula>()
+                entity.HasOne(e => e.Aula)
                       .WithMany()
                       .HasForeignKey(e => e.AulaId)
                       .OnDelete(DeleteBehavior.Restrict)

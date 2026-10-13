@@ -1,4 +1,5 @@
 ﻿@model EstudianteDto
+@using INCLUTEC.Panel.Helpers
 
 @{
     ViewData["Title"] = "Detalle del estudiante";
@@ -31,7 +32,7 @@
                 <div class="d-flex align-items-center gap-3 mb-4">
                     @if (!string.IsNullOrWhiteSpace(Model.AvatarUrlPictogramaPath))
                     {
-                        <img src="@Model.AvatarUrlPictogramaPath" alt="Pictograma de @Model.Nombre"
+                        <img src="@AvatarHelper.Src(Url, Model.AvatarUrlPictogramaPath)" alt="Pictograma de @Model.Nombre"
                              class="rounded-circle" style="width:96px;height:96px;object-fit:cover" />
                     }
                     else
