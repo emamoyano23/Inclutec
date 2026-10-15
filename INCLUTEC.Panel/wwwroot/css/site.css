@@ -115,3 +115,18 @@ body {
     color: var(--txt-primary) !important;
     border-color: var(--border-light) !important;
 }
+[data-theme="dark"] .nav-tabs .nav-link {
+    color: var(--txt-muted) !important;
+}
+
+    [data-theme="dark"] .nav-tabs .nav-link:hover,
+    [data-theme="dark"] .nav-tabs .nav-link:focus {
+        color: var(--txt-primary) !important;
+        border-color: transparent;
+    }
+
+    [data-theme="dark"] .nav-tabs .nav-link.active {
+        color: var(--txt-primary) !important;
+        background-color: var(--bg-card) !important;
+        border-color: var(--border-light) var(--border-light) var(--bg-card) !important;
+    }
