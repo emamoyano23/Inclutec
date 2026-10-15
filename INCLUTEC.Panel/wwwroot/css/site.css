@@ -58,3 +58,60 @@ body {
 .design-icon {
     color: var(--txt-primary) !important;
 }
+
+
+
+[data-theme="dark"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--txt-primary) !important;
+}
+
+[data-theme="dark"] .container-scroller,
+[data-theme="dark"] .page-body-wrapper,
+[data-theme="dark"] .main-panel,
+[data-theme="dark"] .content-wrapper,
+[data-theme="dark"] .footer,
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .navbar-brand-wrapper,
+[data-theme="dark"] .navbar-menu-wrapper {
+    background-color: var(--bg-primary) !important;
+    color: var(--txt-primary) !important;
+}
+
+[data-theme="dark"] .sidebar {
+    background-color: var(--bg-header) !important;
+    border-right: 1px solid var(--border-light) !important;
+}
+
+    [data-theme="dark"] .sidebar .nav .nav-item .nav-link {
+        color: var(--txt-primary) !important;
+    }
+
+        [data-theme="dark"] .sidebar .nav .nav-item .nav-link:hover,
+        [data-theme="dark"] .sidebar .nav .nav-item.active > .nav-link {
+            background-color: var(--hover-bg) !important;
+        }
+
+        [data-theme="dark"] .sidebar .nav .nav-item .nav-link .menu-title,
+        [data-theme="dark"] .sidebar .nav .nav-item .nav-link i {
+            color: var(--txt-primary) !important;
+        }
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] label,
+[data-theme="dark"] .text-muted {
+    color: var(--txt-primary) !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--bg-card) !important;
+    color: var(--txt-primary) !important;
+    border-color: var(--border-light) !important;
+}
