@@ -1,0 +1,62 @@
+﻿@model AulaDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Nueva aula" : "Detalles del aula";
+    var responsables = ViewBag.Responsables as SelectList ?? new SelectList(Array.Empty<SelectListItem>());
+}
+
+<div class="aula-page">
+    <partial name="_Notification" />
+    <div class="form-style shadow-sm mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+                <li class="breadcrumb-item"><a asp-action="Aula" asp-controller="Aula">Lista de Aulas</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="form-style shadow-sm">
+                <h4 class="mb-3 fw-bold">@ViewData["Title"]</h4>
+                <form asp-action="AulaDetails" asp-controller="Aula" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label">Nombre del aula</label>
+                        <input asp-for="Nombre" class="form-control" required maxlength="50" placeholder="Ej.: Sala Inicial o 3° Grado" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AñoLectivo" class="form-label">Año lectivo (fecha)</label>
+                        <input asp-for="AñoLectivo" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" required />
+                        <span asp-validation-for="AñoLectivo" class="text-danger"></span>
+                        <div class="form-text">Se conserva el tipo fecha que usa la API del proyecto.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ResponsableId" class="form-label">Responsable de aula</label>
+                        <select asp-for="ResponsableId" asp-items="responsables" class="form-select" required>
+                            <option value="">-- Elegir responsable --</option>
+                        </select>
+                        <span asp-validation-for="ResponsableId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="EstadoActivo" class="form-check-input" />
+                        <label asp-for="EstadoActivo" class="form-check-label">Aula activa</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a asp-action="Aula" asp-controller="Aula" class="btn btn-outline-secondary">Volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

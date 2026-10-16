@@ -1,0 +1,89 @@
+﻿@model List<AulaDto>
+@{
+    ViewData["Title"] = "Aulas";
+    var responsables = ViewBag.ListaResponsables as List<ResponsableAulaDto> ?? new List<ResponsableAulaDto>();
+    int pagina = ViewBag.PageNumber;
+    int cantidad = ViewBag.PageSize;
+}
+
+<div class="aula-page">
+    <partial name="_Notification" />
+    <div class="form-style shadow-sm mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Lista de Aulas</li>
+            </ol>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="form-style shadow-sm mb-3">
+        <h4 class="mb-3 fw-bold">Lista de Aulas</h4>
+        <div class="row align-items-center">
+            <form asp-action="Aula" asp-controller="Aula" method="get" class="row col-sm-10 col-12 mb-2">
+                <input type="hidden" name="PageSize" value="@cantidad" />
+                <div class="col-12 col-md-6">
+                    <label for="name" class="visually-hidden">Nombre del aula</label>
+                    <input id="name" type="text" class="form-control" name="name" value="@ViewBag.Name" placeholder="Buscar aula por nombre..." />
+                </div>
+                <div class="col-12 col-md-6 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <a asp-action="Aula" class="btn btn-secondary">Limpiar</a>
+                </div>
+            </form>
+            <div class="col-sm-2 col-12">
+                <a asp-action="AulaDetails" asp-controller="Aula" asp-route-id="0" class="btn btn-success">Nuevo</a>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="form-style mb-3" role="status">No se encontraron aulas en esta página.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                var responsable = responsables.FirstOrDefault(r => r.Id == item.ResponsableId);
+                <div class="col-6">
+                    <div class="aula-block">
+                        <div class="aula-info">
+                            <div class="aula-icon"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></div>
+                            <div class="aula-data">
+                                <h5 class="aula-name">@item.Nombre</h5>
+                                <span class="badge aula-year">Fecha lectiva @item.AñoLectivo.ToString("dd/MM/yyyy")</span>
+                                <p class="mt-2 mb-1">@(responsable == null ? $"Responsable #{item.ResponsableId}" : $"{responsable.Apellido}, {responsable.Nombre}")</p>
+                                <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">@(item.EstadoActivo ? "Activa" : "Inactiva")</span>
+                            </div>
+                        </div>
+                        <div class="aula-actions">
+                            <a asp-action="AulaDetails" asp-controller="Aula" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar / Detalles</a>
+                            <a asp-action="Delete" asp-controller="Aula" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Any() || pagina > 1)
+    {
+        <div class="form-style d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4">
+            <span>Página @pagina</span>
+            <nav aria-label="Paginación de aulas" class="d-flex gap-2">
+                @if (pagina > 1)
+                {
+                    <a asp-action="Aula" asp-route-name="@ViewBag.Name" asp-route-PageNumber="@(pagina - 1)" asp-route-PageSize="@cantidad" class="btn btn-outline-secondary">Anterior</a>
+                }
+                @if (Model.Count >= cantidad)
+                {
+                    <a asp-action="Aula" asp-route-name="@ViewBag.Name" asp-route-PageNumber="@(pagina + 1)" asp-route-PageSize="@cantidad" class="btn btn-outline-secondary">Siguiente</a>
+                }
+            </nav>
+        </div>
+    }
+</div>

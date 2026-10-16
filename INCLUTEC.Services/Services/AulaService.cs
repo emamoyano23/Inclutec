@@ -1,6 +1,7 @@
 ﻿using INCLUTEC.Entities.Dtos;
 using INCLUTEC.Panel.Infrastructure.Api.Services;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace INCLUTEC.Services.Services
 {
@@ -17,14 +18,13 @@ namespace INCLUTEC.Services.Services
         public async Task<HttpResponseWrapper<List<AulaDto>>> GetPaginatedAsync(string? name, PaginatedRequest paginated)
         {
             string baseUrl;
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 baseUrl = $"{url}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
             }
             else
             {
-                baseUrl = $"{url}/search?nombre={name}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
+                baseUrl = $"{url}/search?nombre={Uri.EscapeDataString(name.Trim())}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
             }
 
             return await GetListAsync(baseUrl);
@@ -36,21 +36,21 @@ namespace INCLUTEC.Services.Services
             return await BuildResponseAsync<List<AulaDto>>(response);
         }
 
-        public async Task<HttpResponseWrapper<AulaDto>> GetID(int id)
+        public async Task<HttpResponseWrapper<AulaDto>> GetByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"{url}/{id}");
             return await BuildResponseAsync<AulaDto>(response);
         }
 
-        public async Task<HttpResponseWrapper<object>> CreateAsync(AulaDto dto)
+        public async Task<HttpResponseWrapper<object>> CreateAsync(AulaDto aulaDto)
         {
-            var response = await _httpClient.PostAsJsonAsync(url, dto);
+            var response = await _httpClient.PostAsJsonAsync(url, aulaDto);
             return await BuildResponseAsync<object>(response);
         }
 
-        public async Task<HttpResponseWrapper<object>> Update(AulaDto dto)
+        public async Task<HttpResponseWrapper<object>> UpdateAsync(AulaDto aulaDto)
         {
-            var response = await _httpClient.PutAsJsonAsync($"{url}/{dto.Id}", dto);
+            var response = await _httpClient.PutAsJsonAsync($"{url}/{aulaDto.Id}", aulaDto);
             return await BuildResponseAsync<object>(response);
         }
 
@@ -60,24 +60,39 @@ namespace INCLUTEC.Services.Services
             return await BuildResponseAsync<string>(response);
         }
 
+        public Task<HttpResponseWrapper<AulaDto>> GetID(int id)
+        {
+            return GetByIdAsync(id);
+        }
+
+        public Task<HttpResponseWrapper<object>> Update(AulaDto aulaDto)
+        {
+            return UpdateAsync(aulaDto);
+        }
+
         private async Task<HttpResponseWrapper<T>> BuildResponseAsync<T>(HttpResponseMessage response)
         {
-            if (response.IsSuccessStatusCode)
+            var contenido = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
             {
-                if (response.Content.Headers.ContentLength == 0)
-                {
-                    return new HttpResponseWrapper<T>(default, response);
-                }
-
-                var data = await response.Content.ReadFromJsonAsync<T>();
-
-                return new HttpResponseWrapper<T>(data, response);
+                return new HttpResponseWrapper<T>(default, response, contenido) { Error = true };
             }
 
-            return new HttpResponseWrapper<T>(
-                default,
-                response,
-                await response.Content.ReadAsStringAsync());
+            
+            if (string.IsNullOrWhiteSpace(contenido))
+            {
+                return new HttpResponseWrapper<T>(default, response) { Error = false };
+            }
+
+            try
+            {
+                var data = JsonSerializer.Deserialize<T>(contenido, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                return new HttpResponseWrapper<T>(data, response) { Error = false };
+            }
+            catch (JsonException)
+            {
+                return new HttpResponseWrapper<T>(default, response, "La respuesta de la API no tiene el formato esperado.") { Error = true };
+            }
         }
     }
 }

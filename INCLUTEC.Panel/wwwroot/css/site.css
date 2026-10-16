@@ -130,3 +130,92 @@ body {
         background-color: var(--bg-card) !important;
         border-color: var(--border-light) var(--border-light) var(--bg-card) !important;
     }
+
+.aula-page .form-style {
+    padding: 20px;
+    background-color: var(--bg-card);
+    color: var(--txt-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+}
+
+.aula-page .aula-block {
+    height: 100%;
+    padding: 18px;
+    background-color: var(--bg-card);
+    color: var(--txt-primary);
+    border: 1px solid var(--border-light);
+    border-top: 4px solid var(--colors-primary);
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(53, 49, 62, 0.05);
+}
+
+.aula-page .aula-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.aula-page .aula-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background-color: var(--hover-bg);
+    color: var(--colors-primary);
+    font-size: 24px;
+}
+
+.aula-page .aula-data {
+    min-width: 0;
+}
+
+.aula-page .aula-name {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.aula-page .aula-year {
+    padding: 6px 10px;
+    background-color: var(--hover-bg);
+    color: var(--txt-primary);
+    font-size: 12px;
+    white-space: normal;
+}
+
+.aula-page .aula-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.aula-page .btn {
+    font-size: 14px;
+}
+
+@media (max-width: 575px) {
+    .aula-page .aula-block {
+        padding: 12px;
+    }
+
+    .aula-page .aula-info {
+        gap: 8px;
+    }
+
+    .aula-page .aula-icon {
+        width: 28px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .aula-page .aula-name {
+        font-size: 16px;
+    }
+}

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace INCLUTEC.Services.Services
 {
-    internal interface IResponsableAulaService
+    public interface IResponsableAulaService
     {
         Task<HttpResponseWrapper<object>> CreateAsync(ResponsableAulaDto responsableAulaDto);
         Task<HttpResponseWrapper<string>> DeleteAsync(int id);

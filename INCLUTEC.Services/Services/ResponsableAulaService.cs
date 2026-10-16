@@ -1,18 +1,19 @@
 ﻿using INCLUTEC.Entities.Dtos;
 using INCLUTEC.Panel.Infrastructure.Api.Services;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace INCLUTEC.Services.Services
 {
 
-    internal class ResponsableAulaService : IResponsableAulaService
+    public class ResponsableAulaService : IResponsableAulaService
     {
 
-        private const string url = "api/ResponsableAula";
+        private const string url = "api/v1/ResponsableAula";
         private readonly HttpClient _httpclient;
         public ResponsableAulaService(HttpClient http)
         {
@@ -33,15 +34,13 @@ namespace INCLUTEC.Services.Services
 
         public async Task<HttpResponseWrapper<ResponsableAulaDto>> GetID(int id)
         {
-            var response = await _httpclient.GetAsync($"{url}/{id}");
-            return await BuildResponseAsync<ResponsableAulaDto>(response);
+            return await GetResponseAsync<ResponsableAulaDto>($"{url}/{id}");
         }
 
         public async Task<HttpResponseWrapper<List<ResponsableAulaDto>>> GetListAsync(string url)
         {
 
-            var response = await _httpclient.GetAsync(url);
-            return await BuildResponseAsync<List<ResponsableAulaDto>>(response);
+            return await GetResponseAsync<List<ResponsableAulaDto>>(url);
         }
 
         public async Task<HttpResponseWrapper<List<ResponsableAulaDto>>> GetPaginatedAsync(string? name, PaginatedRequest paginated)
@@ -53,7 +52,7 @@ namespace INCLUTEC.Services.Services
             }
             else
             {
-                baseUrl = $"{url}/search?nombre={name}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
+                baseUrl = $"{url}/search?nombre={Uri.EscapeDataString(name.Trim())}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
             }
             return await GetListAsync(baseUrl);
         }
@@ -64,24 +63,51 @@ namespace INCLUTEC.Services.Services
             return await BuildResponseAsync<object>(response);
         }
 
+        private async Task<HttpResponseWrapper<T>> GetResponseAsync<T>(string requestUrl)
+        {
+            try
+            {
+                var response = await _httpclient.GetAsync(requestUrl);
+                return await BuildResponseAsync<T>(response);
+            }
+            catch (HttpRequestException)
+            {
+                return new HttpResponseWrapper<T>(default, new HttpResponseMessage(HttpStatusCode.ServiceUnavailable),
+                    "No se pudieron cargar los responsables. Verificá que la API esté iniciada.")
+                { Error = true };
+            }
+            catch (TaskCanceledException)
+            {
+                return new HttpResponseWrapper<T>(default, new HttpResponseMessage(HttpStatusCode.GatewayTimeout),
+                    "La API demoró demasiado al cargar los responsables.")
+                { Error = true };
+            }
+        }
+
         private async Task<HttpResponseWrapper<T>> BuildResponseAsync<T>(HttpResponseMessage response)
         {
-            if (response.IsSuccessStatusCode)
+            var body = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
             {
-                if (response.Content.Headers.ContentLength == 0)
-                {
-                    return new HttpResponseWrapper<T>(default, response);
-                }
-
-                var data = await response.Content.ReadFromJsonAsync<T>();
-
-                return new HttpResponseWrapper<T>(data, response);
+                return new HttpResponseWrapper<T>(default, response, body) { Error = true };
             }
 
-            return new HttpResponseWrapper<T>(
-                default,
-                response,
-                await response.Content.ReadAsStringAsync());
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return new HttpResponseWrapper<T>(default, response) { Error = false };
+            }
+
+            try
+            {
+                var data = JsonSerializer.Deserialize<T>(body, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                return new HttpResponseWrapper<T>(data, response) { Error = false };
+            }
+            catch (JsonException)
+            {
+                return new HttpResponseWrapper<T>(default, response,
+                    "La respuesta de responsables no se pudo interpretar.")
+                { Error = true };
+            }
         }
     }
 }
