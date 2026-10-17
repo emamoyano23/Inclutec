@@ -21,6 +21,7 @@ namespace INCLUTEC.Api.Controllers
         {
             var query = await _dbContext.Aulas
                 .AsNoTracking()
+                .Include(a => a.Responsable)
                 .OrderByDescending(a => a.Id)
                 .Skip((paginated.PageNumber - 1) * paginated.PageSize)
                 .Take(paginated.PageSize)
@@ -32,12 +33,19 @@ namespace INCLUTEC.Api.Controllers
                 Nombre = a.Nombre,
                 AñoLectivo = a.AñoLectivo,
                 ResponsableId = a.ResponsableId,
+
+                ResponsableNombre = a.Responsable != null
+                ? a.Responsable.Nombre + " " + a.Responsable.Apellido
+                : null,
+
                 EstadoActivo = a.EstadoActivo
 
             }).ToList();
 
             return Ok(resultDto);
         }
+
+
 
         [HttpGet]
         [Route("search")]
@@ -47,6 +55,7 @@ namespace INCLUTEC.Api.Controllers
         {
             var query = await _dbContext.Aulas
                 .AsNoTracking()
+                .Include(a => a.Responsable)
                 .Where(a => string.IsNullOrEmpty(nombre) || a.Nombre.Contains(nombre))
                 .OrderByDescending(a => a.Id)
                 .Skip((paginated.PageNumber - 1) * paginated.PageSize)
@@ -59,12 +68,18 @@ namespace INCLUTEC.Api.Controllers
                 Nombre = a.Nombre,
                 AñoLectivo = a.AñoLectivo,
                 ResponsableId = a.ResponsableId,
+                ResponsableNombre = a.Responsable != null
+                    ? a.Responsable.Nombre + " " + a.Responsable.Apellido
+                    : null,
                 EstadoActivo = a.EstadoActivo
-
             }).ToList();
 
             return Ok(resultDto);
         }
+
+
+
+
 
         [HttpGet]
         [Route("{id:int}")]
@@ -72,6 +87,7 @@ namespace INCLUTEC.Api.Controllers
         {
             var query = await _dbContext.Aulas
                 .AsNoTracking()
+                .Include(a => a.Responsable)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (query == null)
@@ -85,11 +101,15 @@ namespace INCLUTEC.Api.Controllers
                 Nombre = query.Nombre,
                 AñoLectivo = query.AñoLectivo,
                 ResponsableId = query.ResponsableId,
+                ResponsableNombre = query.Responsable != null
+                    ? query.Responsable.Nombre + " " + query.Responsable.Apellido
+                    : null,
                 EstadoActivo = query.EstadoActivo
             };
 
             return Ok(resultDto);
         }
+
 
         [HttpPost]
         public async Task<ActionResult<AulaDto>> Create([FromBody] AulaDto aulaDto)

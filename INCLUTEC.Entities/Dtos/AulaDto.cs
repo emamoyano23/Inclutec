@@ -16,6 +16,8 @@ namespace INCLUTEC.Entities.Dtos
 
         public bool EstadoActivo { get; set; }
 
-        
+        public string? ResponsableNombre { get; set; }
+
+
     }
 }

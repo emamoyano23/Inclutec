@@ -53,7 +53,15 @@
                             <div class="aula-data">
                                 <h5 class="aula-name">@item.Nombre</h5>
                                 <span class="badge aula-year">Fecha lectiva @item.AñoLectivo)</span>
-                                <p class="mt-2 mb-1">Responsable #@item.ResponsableId</p>
+                               
+                                <p class="mt-2 mb-1">
+                                Responsable:
+                                    @(string.IsNullOrWhiteSpace(item.ResponsableNombre)
+                                    ? "Sin asignar"
+                                    : item.ResponsableNombre)
+                                </p>
+
+
                                 <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">@(item.EstadoActivo ? "Activa" : "Inactiva")</span>
                             </div>
                         </div>
