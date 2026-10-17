@@ -1,5 +1,4 @@
 .vs/
 **/bin/
 **/obj/
-# Pictogramas que suben los docentes: no van al repo
 INCLUTEC.Api/App_Data/

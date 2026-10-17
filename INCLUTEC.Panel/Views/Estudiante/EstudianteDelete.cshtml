@@ -1,0 +1,28 @@
+﻿@model EstudianteDto
+@{
+    ViewData["Title"] = "Eliminar estudiante";
+}
+
+<div class="estudiante-page">
+    <div class="form-style shadow-sm mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Estudiante">Lista de Estudiantes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+            </ol>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="form-style shadow-sm">
+        <h4 class="mb-3">Eliminar estudiante</h4>
+        <p>¿Querés eliminar a <strong>@Model.Apellido, @Model.Nombre</strong>?</p>
+        <p>Esta acción no se puede deshacer. Si el estudiante tiene asistencias registradas no se puede eliminar: en ese caso desactivalo desde Editar.</p>
+        <form asp-action="Delete" asp-controller="Estudiante" asp-route-id="@Model.Id" method="post">
+            <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
+            <a asp-action="Index" asp-controller="Estudiante" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
