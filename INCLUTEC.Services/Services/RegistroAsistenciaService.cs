@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 namespace INCLUTEC.Panel.Infrastructure
 {
     public class RegistroAsistenciaService : IRegistroAsistenciaService
-    {
+    { 
       
         private const string url = "api/v1/RegistroAsistencia";
         private readonly HttpClient _httpclient;
@@ -13,7 +13,7 @@ namespace INCLUTEC.Panel.Infrastructure
         {
                _httpclient = http;
         }
-    
+
         public async Task<HttpResponseWrapper<List<RegistroAsistenciaDto>>> GetPaginatedAsync(string? name, PaginatedRequest paginated)
         {
             string baseUrl;
@@ -23,9 +23,13 @@ namespace INCLUTEC.Panel.Infrastructure
             }
             else
             {
-                baseUrl = $"{url}/search?nombre={name}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
+                baseUrl = $"{url}/search?nombre={name}&busqueda={name}&PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
             }
-      return await GetListAsync(baseUrl);
+
+            var response = await _httpclient.GetAsync(baseUrl);
+
+           
+            return await BuildResponseAsync<List<RegistroAsistenciaDto>>(response);
         }
         public async Task<HttpResponseWrapper<List<RegistroAsistenciaDto>>> GetListAsync(string url)
         {
@@ -54,7 +58,29 @@ namespace INCLUTEC.Panel.Infrastructure
             var response = await _httpclient.DeleteAsync($"{url}/{id}");
             return await BuildResponseAsync<string>(response);
         }
+        public async Task<HttpResponseWrapper<List<RegistroAsistenciaResumenDto>>> GetResumenAsync(PaginatedRequest paginated)
+        {
+            var response = await _httpclient.GetAsync($"{url}/resumen?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}");
+            return await BuildResponseAsync<List<RegistroAsistenciaResumenDto>>(response);
+        }
 
+        public async Task<HttpResponseWrapper<List<RegistroAsistenciaDto>>> GetAlumnosAulaAsync(int aulaId, DateTime fecha)
+        {
+            var response = await _httpclient.GetAsync($"{url}/alumnos-aula?aulaId={aulaId}&fecha={fecha:yyyy-MM-dd}");
+            return await BuildResponseAsync<List<RegistroAsistenciaDto>>(response);
+        }
+
+        public async Task<HttpResponseWrapper<object>> CreateBulkAsync(List<RegistroAsistenciaDto> lista)
+        {
+            var response = await _httpclient.PostAsJsonAsync($"{url}/bulk", lista);
+            return await BuildResponseAsync<object>(response);
+        }
+
+        public async Task<HttpResponseWrapper<string>> DeleteGrupoAsync(DateTime fecha, int aulaId)
+        {
+            var response = await _httpclient.DeleteAsync($"{url}/grupo?fecha={fecha:yyyy-MM-dd}&aulaId={aulaId}");
+            return await BuildResponseAsync<string>(response);
+        }
         private async Task<HttpResponseWrapper<T>> BuildResponseAsync<T>(HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)

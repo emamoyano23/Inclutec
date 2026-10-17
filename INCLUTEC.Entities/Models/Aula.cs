@@ -9,7 +9,7 @@ public partial class Aula
 
     public string Nombre { get; set; } = null!;
 
-    public string AñoLectivo { get; set; } = string.Empty;
+    public DateTime AñoLectivo { get; set; } 
 
     public int ResponsableId { get; set; }
 

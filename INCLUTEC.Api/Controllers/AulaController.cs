@@ -100,6 +100,7 @@ namespace INCLUTEC.Api.Controllers
                 Id = query.Id,
                 Nombre = query.Nombre,
                 AñoLectivo = query.AñoLectivo,
+
                 ResponsableId = query.ResponsableId,
                 ResponsableNombre = query.Responsable != null
                     ? query.Responsable.Nombre + " " + query.Responsable.Apellido

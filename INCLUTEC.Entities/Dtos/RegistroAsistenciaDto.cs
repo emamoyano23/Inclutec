@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -11,14 +12,19 @@ namespace INCLUTEC.Entities.Dtos
         public int Id { get; set; }
 
         public DateTime Fecha { get; set; }
+        public string NombreAula { get; set; }
+
 
         [Required(ErrorMessage = "Debes seleccionar un estudiante.")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un estudiante válido")]
         public int EstudianteId { get; set; }
+        public string AvatarImg { get; set; }
 
         public string? NombreCompletoEstudiante { get; set; }
-
+        public int totalPresentes { get; set; }
+        public int totalAusentes { get; set; }
         public bool EstaPresente { get; set; }
+        public int TotalAlumnos { get; set; }
 
         [StringLength(500, ErrorMessage = "Las observaciones no pueden superar los 500 caracteres")]
         public string? Observaciones { get; set; }

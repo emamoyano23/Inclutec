@@ -1,98 +1,155 @@
-﻿@using INCLUTEC.Entities.Dtos;
-@model List<RegistroAsistenciaDto>
+﻿@using INCLUTEC.Entities.Dtos
+@using INCLUTEC.Panel.Helpers
+@model List<RegistroAsistenciaResumenDto>
 @{
     ViewData["Title"] = "Registro de Asistencia";
-    string? busquedaActual = Context.Request.Query["busqueda"];
+
+    void Alumno(AlumnoAsistenciaDto a)
+    {
+        var src = AvatarHelper.Src(Url, a.AvatarImg);
+        <div class="d-flex align-items-center gap-2 mb-2">
+            @if (src != null)
+            {
+                <img src="@src" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;" alt="" />
+            }
+            else
+            {
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                    <i class="bi bi-person"></i>
+                </div>
+            }
+            <div>
+                <div class="fw-semibold">@a.NombreCompleto</div>
+                @if (!string.IsNullOrWhiteSpace(a.Observaciones))
+                {
+                    <small class="text-muted">@a.Observaciones</small>
+                }
+            </div>
+        </div>
+    }
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Registro de Asistencia</h2>
-        <a asp-action="RegistroAsistenciaDetails" asp-route-id="0" class="btn btn-primary text-white">
-            <i class="bi bi-plus-lg"></i> Nuevo Registro
-        </a>
+        <a asp-action="RegistroAsistenciaDetails" class="btn btn-success text-white">+ Nueva Asistencia</a>
     </div>
-
-    <div class="card mb-3 shadow-sm">
-        <div class="card-body">
-            <form asp-action="RegistroAsistencia" method="get" class="row g-2 align-items-center">
-                <div class="col-md-9 col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input type="text" name="busqueda" value="@busquedaActual" class="form-control"
-                               placeholder="Buscar por nombre de estudiante u observaciones..." />
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-outline-primary w-100">
-                        <i class="fa fa-search" aria-hidden="true"></i> Buscar
-                    </button>
-                    @if (!string.IsNullOrEmpty(busquedaActual))
-                    {
-                        <a asp-action="RegistroAsistencia" class="btn btn-outline-secondary">Limpiar</a>
-                    }
-                </div>
-            </form>
+    <form method="get" asp-action="RegistroAsistencia" class="row g-2 align-items-end mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Buscar por fecha</label>
+            <input type="date" name="fecha" class="form-control"
+                   value="@(ViewBag.Fecha != null ? ((DateTime)ViewBag.Fecha).ToString("yyyy-MM-dd") : "")"
+                   onchange="this.form.submit()" />
         </div>
-    </div>
+        <div class="col-md-3">
+            <a asp-action="RegistroAsistencia" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
 
     <div class="card shadow-sm">
         <div class="card-body p-0">
-            <table class="table table-hover table-striped mb-0">
+            <table class="tablaestilo table table-hover table-striped mb-0 align-middle">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Estudiante</th>
                         <th>Fecha</th>
-                        <th>Presente</th>
-                        <th>Observaciones</th>
-                        <th class="text-center">Acciones</th>
+                        <th>Aula</th>
+                        <th>Total Alumnos</th>
+                        <th>Presentes</th>
+                        <th>Ausentes</th>
+                        <th class="text-center">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        @foreach (var registro in Model)
+                        @for (int i = 0; i < Model.Count; i++)
                         {
+                            var item = Model[i];
                             <tr>
-                                <td>@registro.Id</td>
-                                <td>@registro.NombreCompletoEstudiante</td>
-                                <td>@registro.Fecha.ToString("dd/MM/yyyy")</td>
-                                <td>
-                                    @if (registro.EstaPresente)
-                                    {
-                                        <span class="badge bg-success">Sí</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">No</span>
-                                    }
-                                </td>
-                                <td>@(string.IsNullOrEmpty(registro.Observaciones) ? "-" : registro.Observaciones)</td>
+                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@item.NombreAula</td>
+                                <td>@item.TotalAlumnos</td>
+                                <td><span class="badge bg-success">@item.TotalPresentes</span></td>
+                                <td><span class="badge bg-danger">@item.TotalAusentes</span></td>
                                 <td class="text-center">
-                                    <a asp-action="RegistroAsistenciaDetails" asp-route-id="@registro.Id" class="btn btn-sm btn-warning me-1">
-                                        Editar
-                                    </a>
+                                    <button type="button" class="btn btn-sm btn-info text-white"
+                                            data-bs-toggle="modal" data-bs-target="#detalleModal"
+                                            data-aula="@item.NombreAula"
+                                            data-fecha="@item.Fecha.ToString("dd/MM/yyyy")"
+                                            data-presentes="@item.TotalPresentes"
+                                            data-ausentes="@item.TotalAusentes"
+                                            data-detalle="#detalle-@i">
+                                        Ver detalle
+                                    </button>
 
-                                    <form asp-action="Delete" asp-route-id="@registro.Id" method="post" class="d-inline"
-                                          onclick="return confirm('¿Está seguro de que desea eliminar este registro?');">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                    <form asp-action="Delete" method="post" class="d-inline ms-1"
+                                          onsubmit="return confirm('¿Eliminar la asistencia de esta aula en esta fecha?');">
+                                        <input type="hidden" name="fecha" value="@item.Fecha.ToString("yyyy-MM-dd")" />
+                                        <input type="hidden" name="aulaId" value="@item.AulaId" />
+                                        <button type="submit" class="btn btn-sm btn-danger text-white">Eliminar</button>
                                     </form>
+
+                                    
+                                    <div id="detalle-@i" class="d-none">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6 class="text-success">Presentes (@item.TotalPresentes)</h6>
+                                                @foreach (var a in item.Presentes) { Alumno(a); }
+                                                @if (!item.Presentes.Any())
+                                                {
+                                                    <small class="text-muted">Ninguno</small>
+                                                }
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6 class="text-danger">Ausentes (@item.TotalAusentes)</h6>
+                                                @foreach (var a in item.Ausentes) { Alumno(a); }
+                                                @if (!item.Ausentes.Any())
+                                                {
+                                                    <small class="text-muted">Ninguno</small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
                     }
                     else
                     {
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">
-                                No se encontraron registros de asistencia.
-                            </td>
-                        </tr>
+                        <tr><td colspan="6" class="text-center py-4 text-muted">No se encontraron registros de asistencia.</td></tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Detalle de Asistencia - <span id="modalAula"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
+                <div id="modalDetalle"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('detalleModal').addEventListener('show.bs.modal', function (e) {
+            var b = e.relatedTarget;
+            document.getElementById('modalAula').textContent = b.dataset.aula;
+            document.getElementById('modalFecha').textContent = b.dataset.fecha;
+            document.getElementById('modalDetalle').innerHTML =
+                document.querySelector(b.dataset.detalle).innerHTML;
+        });
+    </script>
+}

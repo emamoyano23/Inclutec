@@ -228,7 +228,6 @@ namespace INCLUTEC.Panel.Controllers
             {
                 PageNumber = 1,
                 PageSize = 100,
-                busqueda = string.Empty
             };
 
             var result = await _aulaService.GetPaginatedAsync(null, paginated);

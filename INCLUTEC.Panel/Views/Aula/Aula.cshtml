@@ -52,8 +52,7 @@
                             <div class="aula-icon"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></div>
                             <div class="aula-data">
                                 <h5 class="aula-name">@item.Nombre</h5>
-                                <span class="badge aula-year">Fecha lectiva @item.AñoLectivo)</span>
-                               
+                                <span class="badge aula-year">Año lectivo @item.AñoLectivo.ToString("yyyy")</span>
                                 <p class="mt-2 mb-1">
                                 Responsable:
                                     @(string.IsNullOrWhiteSpace(item.ResponsableNombre)

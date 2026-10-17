@@ -62,7 +62,7 @@ public partial class InclutecbdContext : DbContext
 
         modelBuilder.Entity<RegistroAsistencium>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Fecha).HasColumnType("datetime");
 
             entity.HasOne(d => d.Estudiante).WithMany(p => p.RegistroAsistencia)

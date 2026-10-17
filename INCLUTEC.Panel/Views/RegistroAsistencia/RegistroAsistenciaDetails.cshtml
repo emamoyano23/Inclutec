@@ -1,66 +1,107 @@
-﻿@using INCLUTEC.Entities.Dtos;
-@model RegistroAsistenciaDto
+﻿@model List<INCLUTEC.Entities.Dtos.RegistroAsistenciaDto>
+@using INCLUTEC.Panel.Helpers
+@using INCLUTEC.Entities.Dtos
+
 @{
-    bool esNuevo = Model.Id == 0;
-    ViewData["Title"] = esNuevo ? "Nuevo Registro de Asistencia" : "Editar Registro de Asistencia";
+    ViewData["Title"] = "Tomar Asistencia";
+    var aulas = ViewBag.Aulas as List<AulaDto> ?? new List<AulaDto>();
+    int aulaIdSeleccionada = ViewBag.AulaId != null ? (int)ViewBag.AulaId : 0;
+    string fechaSeleccionada = ViewBag.Fecha != null ? ((DateTime)ViewBag.Fecha).ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 <div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">@ViewData["Title"]</h4>
+    <partial name="_Notification" />
+    <h2>Tomar Asistencia</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="RegistroAsistenciaDetails" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Fecha de Asistencia:</label>
+                    <input type="date" name="fecha" class="form-control" value="@fechaSeleccionada" required />
                 </div>
-                <div class="card-body">
-                    <form asp-action="RegistroAsistenciaDetails" method="post">
-                        @Html.AntiForgeryToken()
-
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
-
-                        <input type="hidden" asp-for="Id" />
-
-                        <div class="mb-3">
-                            <label asp-for="Fecha" class="form-label fw-bold">Fecha</label>
-                            <input asp-for="Fecha" type="date" class="form-control" />
-                            <span asp-validation-for="Fecha" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="EstudianteId" class="form-label fw-bold">ID del Estudiante</label>
-                            <input asp-for="EstudianteId" type="number" class="form-control" placeholder="Ingrese el ID del estudiante..." />
-                            <span asp-validation-for="EstudianteId" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3 form-check d-flex align-items-center gap-2 ps-0">
-                            <input asp-for="EstaPresente" class="form-check-input ms-0 mt-0" type="checkbox" id="chkEstaPresente" />
-                            <label asp-for="EstaPresente" class="form-check-label fw-bold mb-1 ms-0" for="chkEstaPresente">¿Está presente?</label>
-                            <span asp-validation-for="EstaPresente" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Observaciones" class="form-label fw-bold">Observaciones</label>
-                            <textarea asp-for="Observaciones" class="form-control" rows="3" placeholder="Ingrese alguna observacion (max. 500 caracteres)..."></textarea>
-                            <span asp-validation-for="Observaciones" class="text-danger"></span>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="RegistroAsistencia" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> Volver
-                            </a>
-                            <button type="submit" class="btn btn-primary text-white">
-                                <i class="bi bi-save"></i> Guardar
-                            </button>
-                        </div>
-                    </form>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Seleccionar Aula:</label>
+                    <select name="aulaId" class="form-select" required>
+                        <option value="">Seleccione una aula</option>
+                        @foreach (var aula in aulas)
+                        {
+                            <option value="@aula.Id" selected="@(aula.Id == aulaIdSeleccionada)">@aula.Nombre</option>
+                        }
+                    </select>
                 </div>
-            </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">Cargar</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <form asp-action="GuardarAsistenciasMasivas" method="post">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-0">
+                    <table class="table  text-white table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Estudiante</th>
+                                <th style="width: 30%;">Estado de Asistencia</th>
+                                <th style="width: 30%;">Observación (Opcional)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                var avatar = AvatarHelper.Src(Url, Model[i].AvatarImg);
+                                <tr>
+                                    <td>
+                                        <input type="hidden" asp-for="@Model[i].EstudianteId" />
+                                        <input type="hidden" asp-for="@Model[i].Fecha" />
+                                        <input type="hidden" asp-for="@Model[i].NombreCompletoEstudiante" />
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (avatar != null)
+                                            {
+                                                <img src="@avatar" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                            }
+                                            <span class="fw-semibold">@Model[i].NombreCompletoEstudiante</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" asp-for="@Model[i].EstaPresente" />
+                                            <label class="form-check-label" asp-for="@Model[i].EstaPresente">Presente</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" asp-for="@Model[i].Observaciones" class="form-control form-control-sm" placeholder="Ej: Retiro anticipado..." />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mb-4">
+                <a asp-action="RegistroAsistencia" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-success text-white">Guardar Asistencias</button>
+            </div>
+        </form>
+    }
+    else if (aulaIdSeleccionada != 0)
+    {
+        <div class="alert alert-warning">No hay estudiantes activos en esta aula.</div>
+    }
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }

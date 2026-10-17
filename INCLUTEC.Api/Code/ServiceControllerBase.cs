@@ -3,7 +3,7 @@
 namespace INCLUTEC.Api.Code
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class ServiceControllerBase : ControllerBase
     {
 

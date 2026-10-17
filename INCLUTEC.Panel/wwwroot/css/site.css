@@ -23,7 +23,39 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* ===== Tabla de asistencia ===== */
+.tablaestilo {
+    --bs-table-color: #212529;
+    --bs-table-bg: transparent;
+    --bs-table-striped-color: #212529;
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.04);
+    --bs-table-hover-color: #212529;
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.08);
+}
 
+    .tablaestilo tbody td {
+        color: #212529;
+    }
+
+[data-bs-theme="dark"] .tablaestilo,
+[data-theme="dark"] .tablaestilo,
+html.dark .tablaestilo,
+body.dark .tablaestilo,
+body.dark-mode .tablaestilo {
+    --bs-table-color: #f1f3f5;
+    --bs-table-striped-color: #f1f3f5;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.05);
+    --bs-table-hover-color: #ffffff;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.1);
+}
+
+    [data-bs-theme="dark"] .tablaestilo tbody td,
+    [data-theme="dark"] .tablaestilo tbody td,
+    html.dark .tablaestilo tbody td,
+    body.dark .tablaestilo tbody td,
+    body.dark-mode .tablaestilo tbody td {
+        color: #f1f3f5;
+    }
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
