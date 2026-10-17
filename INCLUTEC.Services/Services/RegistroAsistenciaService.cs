@@ -7,7 +7,7 @@ namespace INCLUTEC.Panel.Infrastructure
     public class RegistroAsistenciaService : IRegistroAsistenciaService
     {
       
-        private const string url = "api/RegistroAsistencia";
+        private const string url = "api/v1/RegistroAsistencia";
         private readonly HttpClient _httpclient;
         public RegistroAsistenciaService(HttpClient http)
         {
