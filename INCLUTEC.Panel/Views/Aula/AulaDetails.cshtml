@@ -33,12 +33,27 @@
                         <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
 
+                    
+
                     <div class="mb-3">
-                        <label asp-for="AñoLectivo" class="form-label">Año lectivo (fecha)</label>
-                        <input asp-for="AñoLectivo" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" required />
-                        <span asp-validation-for="AñoLectivo" class="text-danger"></span>
-                        <div class="form-text"></div>
+                        <label asp-for="AñoLectivo" class="form-label">
+                            Año lectivo
+                        </label>
+
+                        <input asp-for="AñoLectivo"
+                               class="form-control"
+                               placeholder="Ej.: 2026"
+                               required />
+
+                        <span asp-validation-for="AñoLectivo"
+                              class="text-danger"></span>
                     </div>
+
+
+
+
+
+
 
                     <div class="mb-3">
                         <label asp-for="ResponsableId" class="form-label">Responsable de aula</label>
