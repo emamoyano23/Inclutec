@@ -204,7 +204,7 @@ namespace INCLUTEC.Api.Controllers
                 Apellido = estudianteDto.Apellido!,
                 AvatarUrlPictogramaPath = estudianteDto.AvatarUrlPictogramaPath!,
                 AulaId = estudianteDto.AulaId,
-                EstadoActivo = estudianteDto.EstadoActivo
+                EstadoActivo = true
             };
 
             _dbContext.Estudiantes.Add(estudiante);
