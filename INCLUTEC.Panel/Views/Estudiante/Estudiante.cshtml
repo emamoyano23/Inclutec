@@ -1,0 +1,97 @@
+﻿@model List<EstudianteDto>
+@using INCLUTEC.Panel.Helpers
+@{
+    ViewData["Title"] = "Estudiantes";
+    var estudiantes = Model ?? new List<EstudianteDto>();
+}
+
+<div class="estudiante-page">
+    <partial name="_Notification" />
+    <div class="form-style shadow-sm mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Lista de Estudiantes</li>
+            </ol>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="form-style shadow-sm mb-3">
+        <h4 class="mb-3 fw-bold">Lista de Estudiantes</h4>
+        <div class="row align-items-center">
+            <form asp-action="Index" asp-controller="Estudiante" method="get" class="row col-sm-10 col-12 mb-2">
+                <div class="col-12 col-md-5">
+                    <label for="nombre" class="visually-hidden">Nombre o apellido</label>
+                    <input id="nombre" type="text" class="form-control" name="nombre" value="@ViewBag.Nombre" placeholder="Buscar por nombre o apellido..." />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="aulaId" class="visually-hidden">Id de aula</label>
+                    <input id="aulaId" type="number" min="1" class="form-control" name="aulaId" value="@ViewBag.AulaId" placeholder="Id de aula" />
+                </div>
+                <div class="col-12 col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+                </div>
+            </form>
+            <div class="col-sm-2 col-12">
+                <a asp-action="Details" asp-controller="Estudiante" asp-route-id="0" class="btn btn-success">Nuevo</a>
+            </div>
+        </div>
+    </div>
+
+    @if (!estudiantes.Any())
+    {
+        <div class="form-style mb-3" role="status">No se encontraron estudiantes.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in estudiantes)
+            {
+                var avatar = AvatarHelper.Src(Url, item.AvatarUrlPictogramaPath);
+
+                <div class="col-6">
+                    <div class="estudiante-block">
+                        <div class="estudiante-info">
+                            @if (avatar != null)
+                            {
+                                <img src="@avatar" alt="Pictograma de @item.Nombre" class="estudiante-avatar" />
+                            }
+                            else
+                            {
+                                <div class="estudiante-icon"><i class="fa-solid fa-user-graduate" aria-hidden="true"></i></div>
+                            }
+                            <div class="estudiante-data">
+                                <h5 class="estudiante-name">@item.Apellido, @item.Nombre</h5>
+                                <span class="badge estudiante-aula">@(string.IsNullOrWhiteSpace(item.NombreAula) ? $"Aula {item.AulaId}" : item.NombreAula)</span>
+                                <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">@(item.EstadoActivo ? "Activo" : "Inactivo")</span>
+                            </div>
+                        </div>
+                        <div class="estudiante-actions">
+                            <a asp-action="Details" asp-controller="Estudiante" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar / Detalles</a>
+                            <a asp-action="Delete" asp-controller="Estudiante" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <span>Página @ViewBag.PageNumber</span>
+            <div class="d-flex gap-2">
+                @if (ViewBag.PageNumber > 1)
+                {
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-nombre="@ViewBag.Nombre" asp-route-aulaId="@ViewBag.AulaId"
+                       asp-route-PageNumber="@(ViewBag.PageNumber - 1)" asp-route-PageSize="@ViewBag.PageSize">Anterior</a>
+                }
+                @if (estudiantes.Count >= ViewBag.PageSize)
+                {
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-nombre="@ViewBag.Nombre" asp-route-aulaId="@ViewBag.AulaId"
+                       asp-route-PageNumber="@(ViewBag.PageNumber + 1)" asp-route-PageSize="@ViewBag.PageSize">Siguiente</a>
+                }
+            </div>
+        </div>
+    }
+</div>

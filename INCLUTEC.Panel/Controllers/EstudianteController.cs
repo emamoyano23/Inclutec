@@ -32,50 +32,63 @@ namespace INCLUTEC.Panel.Controllers
             ViewBag.PageNumber = paginated.PageNumber;
             ViewBag.PageSize = paginated.PageSize;
 
-            return View(result.Response ?? new List<EstudianteDto>());
+            return View("Estudiante", result.Response ?? new List<EstudianteDto>());
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var result = await _estudianteService.GetByIdAsync(id);
+            EstudianteDto estudianteDto;
 
-            if (result.Error || result.Response == null)
+            if (id == 0)
             {
-                TempData["Error"] = await result.GetErrorMessage();
+                estudianteDto = new EstudianteDto
+                {
+                    EstadoActivo = true
+                };
+            }
+            else
+            {
+                var result = await _estudianteService.GetByIdAsync(id);
 
-                return RedirectToAction(nameof(Index));
+                if (result.Error || result.Response == null)
+                {
+                    TempData["Error"] = await result.GetErrorMessage();
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                estudianteDto = result.Response;
             }
 
-            return View(result.Response);
-        }
+            await CargarAulasAsync(estudianteDto.AulaId);
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            await CargarAulasAsync();
-
-            return View("Form", new EstudianteDto { EstadoActivo = true });
+            return View("EstudianteDetails", estudianteDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EstudianteDto estudianteDto, IFormFile? avatar)
+        public async Task<IActionResult> Details(EstudianteDto estudianteDto, IFormFile? avatar)
         {
             if (!ModelState.IsValid)
             {
                 await CargarAulasAsync(estudianteDto.AulaId);
 
-                return View("Form", estudianteDto);
+                return View("EstudianteDetails", estudianteDto);
             }
 
             if (!await SubirAvatarAsync(avatar, estudianteDto))
             {
                 await CargarAulasAsync(estudianteDto.AulaId);
 
-                return View("Form", estudianteDto);
+                return View("EstudianteDetails", estudianteDto);
             }
 
-            var result = await _estudianteService.CreateAsync(estudianteDto);
+            var esNuevo = estudianteDto.Id == 0;
+
+            var result = esNuevo
+                ? await _estudianteService.CreateAsync(estudianteDto)
+                : await _estudianteService.UpdateAsync(estudianteDto.Id, estudianteDto);
 
             if (result.Error)
             {
@@ -83,68 +96,35 @@ namespace INCLUTEC.Panel.Controllers
 
                 await CargarAulasAsync(estudianteDto.AulaId);
 
-                return View("Form", estudianteDto);
+                return View("EstudianteDetails", estudianteDto);
             }
 
-            TempData["Success"] = "El estudiante se dio de alta correctamente.";
+            TempData["Success"] = esNuevo
+                ? "El estudiante se dio de alta correctamente."
+                : "Los datos del estudiante se actualizaron correctamente.";
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var result = await _estudianteService.GetByIdAsync(id);
-
-            if (result.Error || result.Response == null)
-            {
-                TempData["Error"] = await result.GetErrorMessage();
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            await CargarAulasAsync(result.Response.AulaId);
-
-            return View("Form", result.Response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EstudianteDto estudianteDto, IFormFile? avatar)
-        {
-            if (!ModelState.IsValid)
-            {
-                await CargarAulasAsync(estudianteDto.AulaId);
-
-                return View("Form", estudianteDto);
-            }
-
-            if (!await SubirAvatarAsync(avatar, estudianteDto))
-            {
-                await CargarAulasAsync(estudianteDto.AulaId);
-
-                return View("Form", estudianteDto);
-            }
-
-            var result = await _estudianteService.UpdateAsync(id, estudianteDto);
-
-            if (result.Error)
-            {
-                TempData["Error"] = await MensajeDeErrorAsync(result);
-
-                await CargarAulasAsync(estudianteDto.AulaId);
-
-                return View("Form", estudianteDto);
-            }
-
-            TempData["Success"] = "Los datos del estudiante se actualizaron correctamente.";
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _estudianteService.GetByIdAsync(id);
+
+            if (result.Error || result.Response == null)
+            {
+                TempData["Error"] = await result.GetErrorMessage();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View("EstudianteDelete", result.Response);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmado(int id)
         {
             var result = await _estudianteService.DeleteAsync(id);
 
@@ -160,10 +140,6 @@ namespace INCLUTEC.Panel.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // La API devuelve el motivo en el cuerpo (por ejemplo el 409 al borrar un
-        // estudiante con asistencias). Si viene vacio, caigo en el mensaje generico.
-        // Muestra el pictograma que la API guarda fuera de wwwroot. El navegador no le pega
-        // a la API directo: el Panel lo pide y lo devuelve.
         [HttpGet]
         public async Task<IActionResult> Avatar(string fileName)
         {
@@ -185,8 +161,6 @@ namespace INCLUTEC.Panel.Controllers
             return File(contenido, contentType);
         }
 
-        // Si eligieron una imagen nueva la sube a la API y guarda en el DTO el nombre que
-        // devuelve. Si no eligieron ninguna, queda la que ya tenia.
         private async Task<bool> SubirAvatarAsync(IFormFile? avatar, EstudianteDto estudianteDto)
         {
             if (avatar == null || avatar.Length == 0)
@@ -217,7 +191,6 @@ namespace INCLUTEC.Panel.Controllers
                 return await result.GetErrorMessage();
             }
 
-            // Si la API devolvio un ProblemDetails, muestro el texto y no el JSON entero.
             try
             {
                 using var json = JsonDocument.Parse(result.ErrorMessage);
@@ -244,14 +217,11 @@ namespace INCLUTEC.Panel.Controllers
             }
             catch (JsonException)
             {
-                // No era JSON, es un texto plano: lo muestro tal cual.
             }
 
             return result.ErrorMessage;
         }
 
-        // Carga el desplegable de aulas del formulario. El docente elige el aula por
-        // nombre en vez de tener que saberse el Id de memoria.
         private async Task CargarAulasAsync(int? aulaSeleccionada = null)
         {
             var paginated = new PaginatedRequest

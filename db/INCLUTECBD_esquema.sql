@@ -1,6 +1,3 @@
-/* INCLUTEC - esquema de INCLUTECBD con IDENTITY y datos de prueba.
-   Recrea las 4 tablas. Correr solo con las tablas vacias. */
-
 IF OBJECT_ID('dbo.RegistroAsistencia','U') IS NOT NULL DROP TABLE dbo.RegistroAsistencia;
 GO
 IF OBJECT_ID('dbo.Estudiante','U') IS NOT NULL DROP TABLE dbo.Estudiante;
