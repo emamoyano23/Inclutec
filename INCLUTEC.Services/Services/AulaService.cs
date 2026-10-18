@@ -7,7 +7,7 @@ namespace INCLUTEC.Services.Services
 {
     public class AulaService : IAulaService
     {
-        private const string url = "api/v1/Aula";
+        private const string url = "Aula";
         private readonly HttpClient _httpClient;
 
         public AulaService(HttpClient httpClient)

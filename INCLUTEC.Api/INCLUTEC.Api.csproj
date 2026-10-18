@@ -20,4 +20,8 @@
     <ProjectReference Include="..\INCLUTEC.Entities\INCLUTEC.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App_Data\Avatares\" />
+  </ItemGroup>
+
 </Project>

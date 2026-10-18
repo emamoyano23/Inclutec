@@ -10,7 +10,7 @@ namespace INCLUTEC.Entities.Dtos
 
         public string? Nombre { get; set; }
 
-        public DateTime AñoLectivo { get; set; }
+        public string AñoLectivo { get; set; } = string.Empty;
 
         public int ResponsableId { get; set; }
 

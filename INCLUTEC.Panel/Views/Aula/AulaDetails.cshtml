@@ -11,7 +11,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0">
                 <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
-                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Aula">Lista de Aulas</a></li>
+                <li class="breadcrumb-item"><a asp-action="Aula" asp-controller="Aula">Lista de Aulas</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
             </ol>
         </nav>
@@ -23,7 +23,7 @@
         <div class="col-12 col-lg-8">
             <div class="form-style shadow-sm">
                 <h4 class="mb-3 fw-bold">@ViewData["Title"]</h4>
-                <form asp-action="Details" asp-controller="Aula" asp-route-id="@Model.Id" method="post">
+                <form asp-action="SaveChanges" asp-controller="Aula" asp-route-id="@Model.Id" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
                     <input type="hidden" asp-for="Id" />
 
@@ -40,13 +40,9 @@
                             Año lectivo
                         </label>
 
-                        <input asp-for="AñoLectivo"
-                               class="form-control"
-                               placeholder="Ej.: 2026"
-                               required />
-
-                        <span asp-validation-for="AñoLectivo"
-                              class="text-danger"></span>
+                        <input asp-for="AñoLectivo" type="text" class="form-control"
+                               placeholder="Ej.: 2026" />
+                        <span asp-validation-for="AñoLectivo" class="text-danger"></span>
                     </div>
 
 
@@ -71,7 +67,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a asp-action="Index" asp-controller="Aula" class="btn btn-outline-secondary">Volver</a>
+                    <a asp-action="Aula" asp-controller="Aula" class="btn btn-outline-secondary">Volver</a>
                 </form>
             </div>
         </div>

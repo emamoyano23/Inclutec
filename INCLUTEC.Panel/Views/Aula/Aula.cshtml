@@ -1,4 +1,5 @@
 ﻿@model List<AulaDto>
+
 @{
     ViewData["Title"] = "Aulas";
     var aulas = Model ?? new List<AulaDto>();
@@ -7,11 +8,16 @@
 
 <div class="aula-page">
     <partial name="_Notification" />
+
     <div class="form-style shadow-sm mt-2">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Lista de Aulas</li>
+                <li class="breadcrumb-item">
+                    <a asp-action="Index" asp-controller="Home">Inicio</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Lista de Aulas
+                </li>
             </ol>
         </nav>
     </div>
@@ -20,26 +26,55 @@
 
     <div class="form-style shadow-sm mb-3">
         <h4 class="mb-3 fw-bold">Lista de Aulas</h4>
+
         <div class="row align-items-center">
-            <form asp-action="Index" asp-controller="Aula" method="get" class="row col-sm-10 col-12 mb-2">
+            <form asp-action="Aula"
+                  asp-controller="Aula"
+                  method="get"
+                  class="row col-sm-10 col-12 mb-2">
+
                 <div class="col-12 col-md-6">
-                    <label for="name" class="visually-hidden">Nombre del aula</label>
-                    <input id="name" type="text" class="form-control" name="name" value="@nombre" placeholder="Buscar aula por nombre..." />
+                    <label for="name" class="visually-hidden">
+                        Nombre del aula
+                    </label>
+
+                    <input id="name"
+                           type="text"
+                           class="form-control"
+                           name="name"
+                           value="@nombre"
+                           placeholder="Buscar aula por nombre..." />
                 </div>
+
                 <div class="col-12 col-md-6 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                    <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+                    <button type="submit" class="btn btn-primary">
+                        Buscar
+                    </button>
+
+                    <a asp-action="Aula"
+                       asp-controller="Aula"
+                       class="btn btn-secondary">
+                        Limpiar
+                    </a>
                 </div>
             </form>
+
             <div class="col-sm-2 col-12">
-                <a asp-action="Details" asp-controller="Aula" asp-route-id="0" class="btn btn-success">Nuevo</a>
+                <a asp-action="AulaDetails"
+                   asp-controller="Aula"
+                   asp-route-id="0"
+                   class="btn btn-success">
+                    Nuevo
+                </a>
             </div>
         </div>
     </div>
 
     @if (!aulas.Any())
     {
-        <div class="form-style mb-3" role="status">No se encontraron aulas.</div>
+        <div class="form-style mb-3" role="status">
+            No se encontraron aulas.
+        </div>
     }
     else
     {
@@ -49,24 +84,47 @@
                 <div class="col-6">
                     <div class="aula-block">
                         <div class="aula-info">
-                            <div class="aula-icon"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></div>
+                            <div class="aula-icon">
+                                <i class="fa-solid fa-chalkboard-user"
+                                   aria-hidden="true"></i>
+                            </div>
+
                             <div class="aula-data">
-                                <h5 class="aula-name">@item.Nombre</h5>
-                                <span class="badge aula-year">Año lectivo @item.AñoLectivo.ToString("yyyy")</span>
+                                <h5 class="aula-name">
+                                    @item.Nombre
+                                </h5>
+
+                                <span class="badge aula-year">
+                                    Año lectivo @item.AñoLectivo
+                                </span>
+
                                 <p class="mt-2 mb-1">
-                                Responsable:
+                                    Responsable:
                                     @(string.IsNullOrWhiteSpace(item.ResponsableNombre)
-                                    ? "Sin asignar"
-                                    : item.ResponsableNombre)
+                                        ? "Sin asignar"
+                                        : item.ResponsableNombre)
                                 </p>
 
-
-                                <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">@(item.EstadoActivo ? "Activa" : "Inactiva")</span>
+                                <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">
+                                    @(item.EstadoActivo ? "Activa" : "Inactiva")
+                                </span>
                             </div>
                         </div>
+
                         <div class="aula-actions">
-                            <a asp-action="Details" asp-controller="Aula" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar / Detalles</a>
-                            <a asp-action="Delete" asp-controller="Aula" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                            <a asp-action="AulaDetails"
+                               asp-controller="Aula"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-primary">
+                                Editar / Detalles
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-controller="Aula"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-danger">
+                                Eliminar
+                            </a>
                         </div>
                     </div>
                 </div>

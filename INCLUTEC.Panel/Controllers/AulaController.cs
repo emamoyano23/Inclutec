@@ -1,4 +1,5 @@
 ﻿using INCLUTEC.Entities.Dtos;
+using INCLUTEC.Panel.Infrastructure.Api.Services;
 using INCLUTEC.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,76 +25,92 @@ namespace INCLUTEC.Panel.Controllers
             _responsableAulaService = responsableAulaService;
         }
 
-        public async Task<IActionResult> Index(string? name)
+
+        public async Task<IActionResult> Aula(string name, PaginatedRequest paginated)
         {
-            var paginated = new PaginatedRequest
-            {
-                PageNumber = 1,
-                PageSize = 10
-            };
-
             var result = await _aulaService.GetPaginatedAsync(name, paginated);
-
-            return View("Aula", result.Response);
+            return View(result.Response);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> AulaDetails(int Id)
         {
-            AulaDto aulaDto;
+            AulaDto model = new();
+            ViewBag.Text = "Nueva Aula";
 
-            if (id == 0)
+            if (Id != 0)
             {
-                aulaDto = new AulaDto
+                var result = await _aulaService.GetByIdAsync(Id);
+                if (!result.Error)
                 {
-                    EstadoActivo = true
-                };
-            }
-            else
-            {
-                var result = await _aulaService.GetID(id);
-
-                if (result.Error || result.Response == null)
-                {
-                    return NotFound();
+                    ViewBag.Text = "Modificando Aula";
+                    model = result.Response ?? new AulaDto();
                 }
 
-                aulaDto = result.Response;
             }
+            await CargarResponsablesAsync(model.ResponsableId);
+            return View(model);
 
-            await CargarResponsablesAsync(aulaDto.ResponsableId);
-
-            return View("AulaDetails", aulaDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details(AulaDto aulaDto)
+        public async Task<IActionResult> SaveChanges(AulaDto model)
         {
-            if (!ModelState.IsValid)
+            HttpResponseWrapper<object> result;
+            if (model.Id != 0)
             {
-                await CargarResponsablesAsync(aulaDto.ResponsableId);
-
-                return View("AulaDetails", aulaDto);
-            }
-
-            if (aulaDto.Id == 0)
-            {
-                await _aulaService.CreateAsync(aulaDto);
+                result = await _aulaService.UpdateAsync(model);
             }
             else
             {
-                await _aulaService.Update(aulaDto);
+                result = await _aulaService.CreateAsync(model);
+
             }
 
-            return RedirectToAction(nameof(Index));
+            if (!result.Error)
+            {
+                return RedirectToAction("Aula");
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
+
+
+
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            await _aulaService.DeleteAsync(id);
+            var result = await _aulaService.GetByIdAsync(id);
 
-            return RedirectToAction(nameof(Index));
+            if (result.Error || result.Response == null)
+            {
+                return NotFound();
+            }
+
+            return View("AulaDelete", result.Response);
         }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var result = await _aulaService.DeleteAsync(id);
+
+            if (!result.Error)
+            {
+                return RedirectToAction(nameof(Aula));
+            }
+
+            return NotFound();
+        }
+
+
+
+
+
 
         private async Task CargarResponsablesAsync(int? responsableSeleccionado = null)
         {
