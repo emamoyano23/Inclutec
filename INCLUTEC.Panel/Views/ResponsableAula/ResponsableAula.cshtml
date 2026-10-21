@@ -1,0 +1,79 @@
+﻿
+@model List<ResponsableAulaDto>
+
+@{
+    ViewData["Title"] = "Responsables de Aula";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Responsables de Aula</h2>
+        <a asp-action="ResponsableAulaDetails" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nuevo Responsable
+        </a>
+    </div>
+
+    
+    <form asp-action="ResponsableAula" method="get" class="row g-2 mb-3">
+        <div class="col-auto">
+            <input type="text" name="name" class="form-control" placeholder="Buscar por nombre o apellido..." value="@ViewBag.SearchName" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-secondary">Buscar</button>
+            <a asp-action="ResponsableAula" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </form>
+
+    
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rol</th>
+                            <th>Email</th>
+                            <th class="text-center" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Nombre</td>
+                                    <td>@item.Apellido</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">@item.Rol</span>
+                                    </td>
+                                    <td>@item.Email</td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-action="ResponsableAulaDetails" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">
+                                                Editar
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Eliminar">
+                                                Eliminar
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    No se encontraron responsables de aula registrados.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
