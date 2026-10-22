@@ -22,6 +22,7 @@ namespace INCLUTEC.Panel
 
             services.AddScoped<IRegistroAsistenciaService, RegistroAsistenciaService>();
             services.AddScoped<IAulaService, AulaService>();
+            services.AddScoped<IEstudianteService, EstudianteService>();
             services.AddScoped<IResponsableAulaService, ResponsableAulaService>();
             services.AddScoped<IDropdownService, DropdownService>();
 
