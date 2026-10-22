@@ -2,5 +2,3 @@
 **/bin/
 **/obj/
 
-# Configuración local de SQL Server de cada computadora
-/INCLUTEC.Api/appsettings.Local.json
