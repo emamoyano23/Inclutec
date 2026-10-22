@@ -92,6 +92,9 @@ namespace INCLUTEC.Panel.Controllers
             return View("AulaDelete", result.Response);
         }
 
+
+
+
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -106,9 +109,6 @@ namespace INCLUTEC.Panel.Controllers
 
             return NotFound();
         }
-
-
-
 
 
 
