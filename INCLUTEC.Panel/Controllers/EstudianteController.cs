@@ -5,7 +5,10 @@ using INCLUTEC.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-public class EstudianteController : Controller
+namespace INCLUTEC.Panel.Controllers
+{
+
+    public class EstudianteController : Controller
 {
     private readonly IEstudianteService _estudianteService;
     private readonly IDropdownService _dropdownService;
@@ -41,8 +44,9 @@ public class EstudianteController : Controller
             }
         }
         return View(model);
-    } 
-
+    }
+    [HttpPost] 
+    
     public async Task<IActionResult> SaveChanges(EstudianteDto model)
     {
         HttpResponseWrapper<object> result;
@@ -72,6 +76,7 @@ public class EstudianteController : Controller
             return RedirectToAction("EstudianteDetails", model);
         }
     }
+}
 }
 
 
