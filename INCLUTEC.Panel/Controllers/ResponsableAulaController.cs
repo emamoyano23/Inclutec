@@ -3,6 +3,7 @@ using INCLUTEC.Panel.Infrastructure;
 using INCLUTEC.Panel.Infrastructure.Api.Services;
 using INCLUTEC.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace INCLUTEC.Panel.Controllers
 {
@@ -29,5 +30,53 @@ namespace INCLUTEC.Panel.Controllers
 
             return View(result.Response);
         }
-    }
-}
+
+
+        [HttpGet("ResponsableAulaDetails/{id?}")]
+        public async Task<IActionResult> ResponsableAulaDetails(int id = 0)
+        {
+            ResponsableAulaDto model = new();
+            ViewBag.Text = "Nuevo Responsable";
+
+            if (id != 0)
+            {
+                var result = await _responsableAulaService.GetByIdAsync(id);
+                if (!result.Error)
+                {
+                    ViewBag.Text = "Modificando el Responsable";
+                    model = result.Response ?? new ResponsableAulaDto();
+                }
+            }
+
+            return View(model);
+        }
+
+
+
+        [HttpPost("SaveChanges")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveChanges(ResponsableAulaDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Text = model.Id != 0 ? "Modificando el Responsable" : "Nuevo Responsable";
+                return View("ResponsableAulaDetails", model);
+            }
+
+            HttpResponseWrapper<object> result;
+            if (model.Id != 0)
+            {
+                result = await _responsableAulaService.UpdateAsync(model);
+            }
+            else
+            {
+                result = await _responsableAulaService.CreateAsync(model);
+            }
+
+            if (!result.Error)
+            {
+                return RedirectToAction(nameof(ResponsableAula));
+            }
+
+            return NotFound();
+        }
