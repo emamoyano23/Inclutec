@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace INCLUTEC.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [Route("api/v1/estudiantes")]
     public class EstudianteController : ServiceControllerBase
     {
         private readonly InclutecbdContext _dbcontext;

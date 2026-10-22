@@ -1,75 +1,75 @@
 ﻿@model AulaDto
-@using Microsoft.AspNetCore.Mvc.Rendering
-@{
-    ViewData["Title"] = Model.Id == 0 ? "Nueva aula" : "Detalles del aula";
-    var responsables = ViewBag.Responsables as SelectList ?? new SelectList(Array.Empty<SelectListItem>());
-}
 
-<div class="aula-page">
-    <partial name="_Notification" />
-    <div class="form-style shadow-sm mt-2">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
-                <li class="breadcrumb-item"><a asp-action="Aula" asp-controller="Aula">Lista de Aulas</a></li>
-                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
-            </ol>
-        </nav>
-    </div>
-
-    <br />
-
-    <div class="row">
-        <div class="col-12 col-lg-8">
-            <div class="form-style shadow-sm">
-                <h4 class="mb-3 fw-bold">@ViewData["Title"]</h4>
-                <form asp-action="SaveChanges" asp-controller="Aula" asp-route-id="@Model.Id" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
-                    <input type="hidden" asp-for="Id" />
-
-                    <div class="mb-3">
-                        <label asp-for="Nombre" class="form-label">Nombre del aula</label>
-                        <input asp-for="Nombre" class="form-control" required maxlength="50" placeholder="Ej.: Sala Inicial o 3° Grado" />
-                        <span asp-validation-for="Nombre" class="text-danger"></span>
-                    </div>
-
-                    
-
-                    <div class="mb-3">
-                        <label asp-for="AñoLectivo" class="form-label">
-                            Año lectivo
-                        </label>
-
-                        <input asp-for="AñoLectivo" type="text" class="form-control"
-                               placeholder="Ej.: 2026" />
-                        <span asp-validation-for="AñoLectivo" class="text-danger"></span>
-                    </div>
-
-
-
-
-
-
-
-                    <div class="mb-3">
-                        <label asp-for="ResponsableId" class="form-label">Responsable de aula</label>
-
-
-                        <select asp-for="ResponsableId" asp-items="responsables" class="form-select" required>
-                            <option value="">-- Elegir responsable --</option>
-                        </select>
-                        <span asp-validation-for="ResponsableId" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-check mb-4">
-                        <input asp-for="EstadoActivo" class="form-check-input" />
-                        <label asp-for="EstadoActivo" class="form-check-label">Aula activa</label>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a asp-action="Aula" asp-controller="Aula" class="btn btn-outline-secondary">Volver</a>
-                </form>
-            </div>
+<!-- Header y Breadcrumb -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body d-flex flex-row justify-content-between align-items-center py-3 px-4">
+        <div>
+            <h5 class="mb-0 fw-bold">Aula</h5>
+        </div>
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" class="text-decoration-none">Inicio</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Aula" asp-controller="Aula" class="text-decoration-none">Aula</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Text</li>
+                </ol>
+            </nav>
         </div>
     </div>
 </div>
+
+<!-- Formulario de Aula -->
+<div class="card shadow-sm border-0">
+    <div class="card-header fw-bold">
+        @ViewBag.Text
+    </div>
+    <div class="card-body">
+        <form asp-action="SaveChanges" asp-controller="Aula" method="post">
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row">
+                <!-- Nombre del Aula -->
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="Nombre" class="form-label fw-bold">Nombre del Aula:</label>
+                    <input asp-for="Nombre" class="form-control" type="text" placeholder="Ej: Sala Verde - Mañana" />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <!-- Año Lectivo -->
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="AñoLectivo" class="form-label fw-bold">Año Lectivo:</label>
+                    <input asp-for="AñoLectivo" class="form-control" type="text" placeholder="Ej: 2026" maxlength="4" />
+                    <span asp-validation-for="AñoLectivo" class="text-danger small"></span>
+                </div>
+
+                <!-- Seleccionar Responsable -->
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="ResponsableId" class="form-label fw-bold">Responsable a Cargo:</label>
+                    <select asp-for="ResponsableId" class="form-select" asp-items="ViewBag.SelectedResponsable">
+                    </select>
+                    <span asp-validation-for="ResponsableId" class="text-danger small"></span>
+                </div>
+                <div class="mb-3 col-12 my-2 p-2">
+                    <div class="form-switch">
+                        <input asp-for="EstadoActivo" class="form-check-input" type="checkbox" style="margin-right:15px;">
+                        <label asp-for="EstadoActivo" class="form-check-label fw-bold">¿Aula Activa?</label>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="col-12 text-end mt-3">
+                    <a asp-action="Aula" asp-controller="Aula" class="btn btn-outline-secondary me-2">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

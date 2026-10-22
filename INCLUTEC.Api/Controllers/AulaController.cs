@@ -125,7 +125,6 @@ namespace INCLUTEC.Api.Controllers
 
             var aula = new Aula
             {
-                Id = aulaDto.Id,
                 Nombre = aulaDto.Nombre!,
                 AñoLectivo = aulaDto.AñoLectivo,
                 ResponsableId = aulaDto.ResponsableId,

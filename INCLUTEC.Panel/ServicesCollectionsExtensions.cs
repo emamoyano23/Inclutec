@@ -1,4 +1,5 @@
-﻿using INCLUTEC.Panel.Infrastructure;
+﻿using INCLUTEC.Panel.Helpers;
+using INCLUTEC.Panel.Infrastructure;
 using INCLUTEC.Services.Services;
 
 namespace INCLUTEC.Panel
@@ -22,6 +23,7 @@ namespace INCLUTEC.Panel
             services.AddScoped<IRegistroAsistenciaService, RegistroAsistenciaService>();
             services.AddScoped<IAulaService, AulaService>();
             services.AddScoped<IResponsableAulaService, ResponsableAulaService>();
+            services.AddScoped<IDropdownService, DropdownService>();
 
             return services;
 

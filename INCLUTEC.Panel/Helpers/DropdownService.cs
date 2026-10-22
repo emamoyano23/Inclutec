@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace INCLUTEC.Panel.Helpers
 {
-    public class DropdownService
+    public class DropdownService : IDropdownService
     {
         private readonly IAulaService _aulaService;
         private readonly IResponsableAulaService _responsableAulaService;
