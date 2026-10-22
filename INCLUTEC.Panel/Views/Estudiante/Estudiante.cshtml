@@ -1,0 +1,129 @@
+﻿@model List<EstudianteDto>
+
+@{
+    ViewData["Title"] = "Estudiantes";
+    var estudiantes = Model ?? new List<EstudianteDto>();
+    var nombre = Context.Request.Query["name"].ToString();
+}
+
+<div class="aula-page">
+    <partial name="_Notification" />
+
+    <div class="form-style shadow-sm mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item">
+                    <a asp-action="Index" asp-controller="Home">Inicio</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Lista de Estudiantes
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="form-style shadow-sm mb-3">
+        <h4 class="mb-3 fw-bold">Lista de Estudiantes</h4>
+
+        <div class="row align-items-center">
+            <form asp-action="Estudiante"
+                  asp-controller="Estudiante"
+                  method="get"
+                  class="row col-sm-10 col-12 mb-2">
+
+                <div class="col-12 col-md-6">
+                    <label for="name" class="visually-hidden">
+                        Nombre o apellido del estudiante
+                    </label>
+
+                    <input id="name"
+                           type="text"
+                           class="form-control"
+                           name="name"
+                           value="@nombre"
+                           placeholder="Buscar estudiante por nombre o apellido..." />
+                </div>
+
+                <div class="col-12 col-md-6 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Buscar
+                    </button>
+
+                    <a asp-action="Estudiante"
+                       asp-controller="Estudiante"
+                       class="btn btn-secondary">
+                        Limpiar
+                    </a>
+                </div>
+            </form>
+
+            <div class="col-sm-2 col-12">
+                <a asp-action="EstudianteDetails"
+                   asp-controller="Estudiante"
+                   asp-route-id="0"
+                   class="btn btn-success">
+                    Nuevo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (!estudiantes.Any())
+    {
+        <div class="form-style mb-3" role="status">
+            No se encontraron estudiantes.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in estudiantes)
+            {
+                <div class="col-6">
+                    <div class="aula-block">
+                        <div class="aula-info">
+                            <div class="aula-icon">
+                                <i class="fa-solid fa-user-graduate"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <div class="aula-data">
+                                <h5 class="aula-name">
+                                    @item.Apellido, @item.Nombre
+                                </h5>
+
+                                <span class="badge aula-year">
+                                    @(string.IsNullOrWhiteSpace(item.NombreAula)
+                                        ? "Sin aula"
+                                        : item.NombreAula)
+                                </span>
+
+                                <p class="mt-2 mb-1">
+                                    Pictograma:
+                                    @(string.IsNullOrWhiteSpace(item.AvatarUrlPictogramaPath)
+                                        ? "Sin asignar"
+                                        : item.AvatarUrlPictogramaPath)
+                                </p>
+
+                                <span class="badge @(item.EstadoActivo ? "bg-success" : "bg-secondary")">
+                                    @(item.EstadoActivo ? "Activo" : "Inactivo")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="aula-actions">
+                            <a asp-action="EstudianteDetails"
+                               asp-controller="Estudiante"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-primary">
+                                Editar / Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

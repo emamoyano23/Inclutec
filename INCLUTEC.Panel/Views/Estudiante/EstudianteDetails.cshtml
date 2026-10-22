@@ -1,0 +1,76 @@
+﻿@model EstudianteDto
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body d-flex flex-row justify-content-between align-items-center py-3 px-4">
+        <div>
+            <h5 class="mb-0 fw-bold">Estudiante</h5>
+        </div>
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" class="text-decoration-none">Inicio</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Estudiante" asp-controller="Estudiante" class="text-decoration-none">Estudiante</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Text</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header fw-bold">
+        @ViewBag.Text
+    </div>
+    <div class="card-body">
+        <form asp-action="SaveChanges" asp-controller="Estudiante" method="post">
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row">
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="Nombre" class="form-label fw-bold">Nombre:</label>
+                    <input asp-for="Nombre" class="form-control" type="text" placeholder="Ej: Mateo" />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="Apellido" class="form-label fw-bold">Apellido:</label>
+                    <input asp-for="Apellido" class="form-control" type="text" placeholder="Ej: Alvarez" />
+                    <span asp-validation-for="Apellido" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="AulaId" class="form-label fw-bold">Aula:</label>
+                    <select asp-for="AulaId" class="form-select" asp-items="ViewBag.SelectedAula">
+                    </select>
+                    <span asp-validation-for="AulaId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3 col-12 col-md-6">
+                    <label asp-for="AvatarUrlPictogramaPath" class="form-label fw-bold">Pictograma:</label>
+                    <input asp-for="AvatarUrlPictogramaPath" class="form-control" type="text" placeholder="Ej: sin-imagen.png" />
+                    <span asp-validation-for="AvatarUrlPictogramaPath" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3 col-12 my-2 p-2">
+                    <div class="form-switch">
+                        <input asp-for="EstadoActivo" class="form-check-input" type="checkbox" style="margin-right:15px;">
+                        <label asp-for="EstadoActivo" class="form-check-label fw-bold">¿Estudiante activo?</label>
+                    </div>
+                </div>
+
+                <div class="col-12 text-end mt-3">
+                    <a asp-action="Estudiante" asp-controller="Estudiante" class="btn btn-outline-secondary me-2">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
